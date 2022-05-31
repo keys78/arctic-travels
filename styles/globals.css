@@ -23,6 +23,29 @@ html { scroll-behavior: smooth;}
   animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
 }
 
+.navlinks > h1 {
+  position: relative;
+}
+.navlinks > h1:after {    
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: #fff;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+.navlinks > h1:hover:after { 
+  width: 100%; 
+  left: 0; 
+}
+
+
+.robo { background-color: #00000079; animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;}
+
 .is-sticky {
   position: fixed;
   top: 0;
@@ -47,9 +70,13 @@ html { scroll-behavior: smooth;}
 body { font-family: var(--font); position: relative; color: var(--nearHellBlack); background: var(--white);}
 .layout { max-width: 1920px; margin: 0 auto;}
 .gen-wrapper { padding-right: 120px; padding-left: 120px;}
+
+
 .nabvar { position: sticky; top: 0;}
 .navlinks {  max-width: 750px; width: 100%; font-size: 14px;}
-.navlinks h1:last-of-type {margin-left: auto; color: var(--primaryBlue); background:var(--white); border:1px solid #fff; padding: 13px 30px; border-radius: 10px;}
+.navlinks h1:last-of-type {margin-left: auto; color: var(--primaryBlue); background:var(--white); border:1px solid #fff; padding: 13px 30px; border-radius: 10px; cursor: pointer;}
+.navlinks h1:last-of-type:after { display: none !important;}
+
 
 
 .logo-wrapper { width:500px;}
