@@ -31,11 +31,18 @@ html { scroll-behavior: smooth;}
   width: 100%;
   z-index: 999;
   box-shadow: 0 2px 24px 0 rgb(0 0 0 / 15%);
-  background-color: rgb(0, 0, 0)!important ;
+  /* background-color: rgb(0, 0, 0)!important ; */
   transition: 0.4s;
   animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
   padding: 11px 0;
+  -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    background-color: rgba(white, 0.5);
 }
+
+/* .is-sticky::after {
+  filter: blur(10px);
+} */
 
 body { font-family: var(--font); position: relative; color: var(--nearHellBlack); background: var(--white);}
 .layout { max-width: 1920px; margin: 0 auto;}
