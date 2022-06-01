@@ -7,7 +7,7 @@ const Passes = () => {
             <div className='passes-wrapper '>
                 <h1>View Passes We&apos;ve Made<br /> Available For You</h1>
                 <div>
-                    <Button text='View Passes' icon={'/images/fly_plane.png'} background='primary-blue' color="white" onClick={() => alert('view passes route')} />
+                    <Button text='View Passes'  background='primary-blue' color="white" onClick={() => alert('view passes route')} />
                 </div>
             </div>
 

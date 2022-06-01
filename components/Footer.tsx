@@ -16,7 +16,7 @@ const Footer = () => {
                 <div className='gridicon'>
                     <div>
                         <Image src="/images/footer-logo.png" height={'40px'} width={'40px'} />
-                        <h1 className='font-bold text-lg'>Arctic Travels</h1>
+                        <h1 className='font-bold text-lg pb-5'>Arctic Travels</h1>
                         <p className='text-xs opacity-70'>Book your trip in minutes, get full<br /> control for much longer.</p>
                     </div>
                     <div className='links-container'>

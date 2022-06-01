@@ -20,7 +20,11 @@ const Navbar = () => {
     return (
         <header className='header-section flex items-center justify-between gen-wrapper'>
             <div className="logo-wrapper flex items-center space-x-3">
-                <Image src="/images/artic-logo.png" height={'40px'} width={'40px'} />
+                <div className='el-wrap'>
+                <img className='el-logo' src="/images/dotted_circle.png" height={'40px'} width={'40px'} />
+                <img className='el-plane' src="/images/angular_plane.png" height={'40px'} width={'40px'} />
+                
+                </div>
                 <span className='font-bold text-white'>Arctic Travels</span>
             </div>
             <NavLinks />

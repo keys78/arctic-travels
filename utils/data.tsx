@@ -1,4 +1,4 @@
-export const footerLinksDetails: { title: string; links:any }[] = [
+export const footerLinksDetails: { title: string; links:{} }[] = [
     {
         title: 'company',
         links: [

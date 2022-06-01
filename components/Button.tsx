@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 interface ButtonProps {
     text: string
-    icon: any
+    icon?: any
     background: string
     color: string
     onClick: any
