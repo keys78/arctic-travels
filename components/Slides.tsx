@@ -20,13 +20,15 @@ const slides: { id: number; title: string, image: string }[] = [
 
 
 const Slides = () => {
-    const [activeSlide, setActiveSlide] = useState(0)
+    const [activeSlide, setActiveSlide] = useState<any>('')
 
     const renderSlides = slides && slides.map((val, i) => (
-        <div onClick={() => setActiveSlide(i)} key={val.id} className={`slide ${activeSlide === i ? 'slide--expanded' : ''}`}>
+
+        <div onClick={() => setActiveSlide(i)} key={val.id} className={`slide relative ${activeSlide === i ? 'slide--expanded' : ''}`}>
             <img src={val.image} alt="slide images" />
-            <button className='text-9xl text-red-500' onClick={() => setActiveSlide(-1)}>Close</button>
+            <button className='text-9xl text-red-500 absolute top-0' onClick={() => setActiveSlide(2)}>Close</button>
         </div>
+
     ))
 
 

@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image';
 import Button from './Button';
+import { countryList, personsList } from '../utils/data';
+import moment from 'moment'
 
 const bookingDetails: { title: string; icon: string }[] = [
     {
@@ -21,8 +23,22 @@ const bookingDetails: { title: string; icon: string }[] = [
     },
 ]
 
+const testst = moment(new Date).format('MM/DD/YYYY hh:mm:ss a');
+
+
 
 const BookingPanel = () => {
+    let cities: any = [...countryList];
+    const renderList = cities.map(function (item: any) {
+        return <option value={item}>{item}</option>
+    });
+
+    let persons: any[] = [...personsList];
+    const renderPersons = persons.map(function (item: any) {
+        return <option value={item}>{item}</option>
+    });
+
+
     const renderBookingPanel = bookingDetails && bookingDetails.map((val, i) => (
         <div className='bp-single-item' key={i}>
             <div className='flex items-center space-x-3'>
@@ -30,16 +46,17 @@ const BookingPanel = () => {
                 <h1 className='bp-title'>{val.title}</h1>
             </div>
 
-            <select name="" id="">
-                <option value="hellow W">Hello World</option>
-                <option value="hellow W">Hello World</option>
-            </select>
+            {val.title === 'location' && <select > {renderList} </select> }
+            {val.title === 'person' && <select > {renderPersons} </select> }
+            {val.title === 'check out' && <input type={'date'} name={testst}/>}
+            {val.title === 'check in' && <input type={'date'}/>}
+
         </div>
     ))
     return (
         <div className='bp-wrapper flex items-center justify-between'>
             {renderBookingPanel}
-            <Button text='Book Now' icon={'/images/fly_plane.png'} background='primary-blue' color="white" onClick={() => alert('Hello Wworls')}/>
+            <Button text='Book Now' icon={'/images/fly_plane.png'} background='primary-blue' color="white" onClick={() => alert('Hello Wworls')} />
         </div>
     )
 }

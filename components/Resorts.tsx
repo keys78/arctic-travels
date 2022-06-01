@@ -8,18 +8,18 @@ const resortDetails: { title: string; image: string, location: string }[] = [
         image: "/images/resort_1.png"
     },
     {
-        title: 'Winter landscape Chalet',
-        location: 'Cambodia',
+        title: 'Frozen Bolov Hut',
+        location: 'Ice land',
         image: "/images/resort_2.png"
     },
     {
-        title: 'Winter landscape Chalet',
-        location: 'Cambodia',
+        title: 'Crystal Freezing Waters',
+        location: 'Sychelles',
         image: "/images/resort_3.png"
     },
     {
-        title: 'Winter landscape Chalet',
-        location: 'Cambodia',
+        title: 'Ice Age Roads',
+        location: 'Ausria',
         image: "/images/resort_4.png"
     },
 
@@ -28,7 +28,7 @@ const resortDetails: { title: string; image: string, location: string }[] = [
 const Resorts = () => {
     const renderResorts = resortDetails && resortDetails.map((val, i) => (
         <div key={i}>
-            <ResortCard image={val.image} />
+            <ResortCard city={val.location} resort_name={val.title} image={val.image} />
         </div>
     ))
     return (
