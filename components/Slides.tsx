@@ -26,7 +26,11 @@ const Slides = () => {
 
         <div onClick={() => setActiveSlide(i)} key={val.id} className={`slide relative ${activeSlide === i ? 'slide--expanded' : ''}`}>
             <img src={val.image} alt="slide images" />
-            <button className='text-9xl text-red-500 absolute top-0' onClick={() => setActiveSlide(2)}>Close</button>
+            <div className='slides-overlay'>
+                <div>Back</div>
+                <h1>Mountain Resort</h1>
+            </div>
+            {/* <button className='text-9xl text-red-500 absolute top-0' onClick={() => setActiveSlide(2)}>Close</button> */}
         </div>
 
     ))

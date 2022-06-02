@@ -46,17 +46,19 @@ const BookingPanel = () => {
                 <h1 className='bp-title'>{val.title}</h1>
             </div>
 
-            {val.title === 'location' && <select > {renderList} </select> }
-            {val.title === 'person' && <select > {renderPersons} </select> }
-            {val.title === 'check out' && <input type={'date'} name={testst}/>}
-            {val.title === 'check in' && <input type={'date'}/>}
+            {val.title === 'location' && <select > {renderList} </select>}
+            {val.title === 'person' && <select > {renderPersons} </select>}
+            {val.title === 'check out' && <input type={'date'} name={testst} />}
+            {val.title === 'check in' && <input type={'date'} />}
 
         </div>
     ))
     return (
-        <div className='bp-wrapper flex items-center justify-between'>
-            {renderBookingPanel}
-            <Button text='Book Now' icon={'/images/fly_plane.png'} background='primary-blue' color="white" onClick={() => alert('Hello Wworls')} />
+        <div className='gen-wrapper'>
+            <div className='bp-wrapper '>
+                {renderBookingPanel}
+                <Button text='Book Now' icon={'/images/fly_plane.png'} background='primary-blue' color="white" onClick={() => alert('Hello Wworls')} />
+            </div>
         </div>
     )
 }

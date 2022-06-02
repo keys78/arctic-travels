@@ -26,6 +26,26 @@ export const footerLinksDetails: { title: string; links: {} }[] = [
 ]
 
 
+export const navLinks: { title: string; href: string }[] = [
+    {
+        title: 'About Us',
+        href: '/'
+    },
+    {
+        title: 'Support',
+        href: '/'
+    },
+    {
+        title: 'FAQ',
+        href: '/'
+    },
+    {
+        title: 'Sign In',
+        href: '/signin'
+    },
+]
+
+
 export const personsList = [
     "1 Person", "2 Persons", "3 Persons", "4 Persons"
 ]
