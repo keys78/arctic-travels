@@ -30,12 +30,12 @@ const testst = moment(new Date).format('MM/DD/YYYY hh:mm:ss a');
 const BookingPanel = () => {
     let cities: any = [...countryList];
     const renderList = cities.map(function (item: any) {
-        return <option value={item}>{item}</option>
+        return <option key={item} value={item}>{item}</option>
     });
 
     let persons: any[] = [...personsList];
     const renderPersons = persons.map(function (item: any) {
-        return <option value={item}>{item}</option>
+        return <option key={item} value={item}>{item}</option>
     });
 
 

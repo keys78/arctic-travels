@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/data.js", "components/Passes.tsx", "components/Footer.tsx", "components/DatePick.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/data.js", "components/Passes.tsx", "components/Footer.tsx", "components/DatePick.jsx", "pages/signin.tsx"],
   "exclude": ["node_modules"]
 }

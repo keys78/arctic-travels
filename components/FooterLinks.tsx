@@ -10,10 +10,10 @@ const FooterLinks = ({header, links }: footerProps) => {
         <p key={i}><a href='#'> {val.link} </a></p>
     ))
     return (
-            <div className='footer-links'>
+            <span className='footer-links'>
                 <h1>{header}</h1>
                 {renderLinks}
-            </div>
+            </span>
     )
 }
 
