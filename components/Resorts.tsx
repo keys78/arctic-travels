@@ -33,7 +33,7 @@ const Resorts = () => {
     ))
     return (
         <div className='gen-wrapper'>
-            <h1 className='resort-header'>The best resorts <br /> to chill<br /> and relax</h1>
+            <h1 className='resort-header'>The best resorts <br className='br-chill'/> to chill<br /> and relax</h1>
             <div className='resort-grid'>
                 {renderResorts}
             </div>

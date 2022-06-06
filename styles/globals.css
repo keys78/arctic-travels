@@ -130,12 +130,6 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 
 
 
-
-
-
-
-
-
 .slider {
   width: 100%;
   max-height: 1024px;
@@ -188,9 +182,17 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 
 
 .card-overlay { display: none; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.563442) 60.97%, rgba(0, 0, 0, 0.65) 100%); 
-  padding:0 20px; position: absolute; top: 0; left: 0; width: 100%; height: auto; border-radius: 10px;}
-.card-overlay > h1 { font-size: 28px; font-weight: 600; color: var(--white); margin-top: 476px;}
-.card-overlay > h2 { font-size: 18px; font-weight: 500; color: var(--white); margin: 16px 0 28px 0;}
+  padding:0 20px; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px;}
+  .card-overlay-rel { position: relative;}
+
+  .card-overlay-rel > div { position: absolute;
+    width: 100%;
+    right: 50%;
+    transform: translate(50%, 250%);
+}
+
+.card-overlay > div > div > h1 { font-size: 28px; font-weight: 600; color: var(--white); }
+.card-overlay > div > div > h2 { font-size: 18px; font-weight: 500; color: var(--white); margin: 16px 0 28px 0;}
 .btn-class { background: var(--primaryBlue); color: var(--creamsonWhite); width: 100%; padding: 20px 0; font-size: 16px; font-weight: 600; border-radius: 10px;}
 
 .passes-container { background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/passes.jpg'); background-repeat: no-repeat; background-size: cover; color: var(--white)}
@@ -202,7 +204,7 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 .footer-links > h1 { color: var(--primaryBlue); font-size: 14px; text-transform: uppercase; margin-bottom: 40px;}
 .footer-links > p > a { font-size: 14px; line-height:36px; text-decoration: none; color: var(--nearHellBlack); }
 .footer-links > p > a { position: relative;}
-.footer-links > p > a:after {     background: none repeat scroll 0 0 transparent; bottom: 0; content: ""; display: block; height: 2px; left: 50%; position: absolute; background: rgb(27, 73, 240); transition: width 0.3s ease 0s, left 0.3s ease 0s; width: 0;}
+.footer-links > p > a:after { background: none repeat scroll 0 0 transparent; bottom: 0; content: ""; display: block; height: 2px; left: 50%; position: absolute; background: rgb(27, 73, 240); transition: width 0.3s ease 0s, left 0.3s ease 0s; width: 0;}
 .footer-links > p > a:hover:after {  width: 100%;  left: 0; }
 
 
@@ -237,6 +239,10 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .bp-single-item > select {  width: 100%;}
   .map-area h1 { font-size: 34px; line-height: 44px; padding-bottom: 27px;}
   .resort-header { font-size: 34px; line-height: 44px; padding-bottom: 27px; }
+  .passes-wrapper > h1 { font-size: 52px; line-height: 88px; }
+  .card-overlay-rel > div {
+    transform: translate(50%, 150%);
+}
 
 
 }
@@ -263,12 +269,21 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .map-area img { height: 150px;}
   .card-overlay { display: block; } 
   .resort-grid { gap:7px; }
+  .passes-wrapper > h1 { font-size: 32px; line-height: 40px; }
+  .passes-wrapper { padding: 82px 0px 0 0;}
+  .passes-wrapper > div { padding: 13px 0 161px 0;}
 
-
+  .footer-links > h1  { margin-bottom: 20px;}
+  .gridicon { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .links-container { margin: 72px 0;}
+  .legal { padding-top: 30px;}
 }
 
 @media screen and (max-width: 700px) {
   .hamburger .line { display: block !important;}
+  .card-overlay { padding: 0 10px;}
+  .card-overlay > div > div > h1 { font-size: 24px;}
+  .card-overlay-rel > div { transform: translate(50%, 80%);}
 }
 
 
@@ -278,22 +293,38 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .gen-btn {  grid-column: span 1 / span 1; }
   .bp-single-item > select {max-width: 100%; width: 100%;}
   .bp-single-item > input {max-width: 100%; width: 100%;}
+  .resort-grid { display: grid; gap:0; row-gap: 12px; grid-template-columns: 1fr; }
+  .card-overlay-rel > div { transform: translate(50%, 180%);}
+  .br-chill { display: none;}
+  .card-r { max-width: 100%;}
+  .resort-grid > div:nth-of-type(1) { margin-top: 100px;}
+
+
   
 }
 
 @media screen and (max-width: 450px) {
   .sponsors { overflow: hidden; padding: 45px 0  50px 0;}
   .map-area img { height: 100px;}
-  .resort-grid { display: grid; gap:0; row-gap: 12px; grid-template-columns: 1fr; }
-  .resort-grid > div:nth-of-type(1) { margin-top: 0;}
   .resort-grid > div:nth-of-type(4) { margin-top: 0;}
+  .passes-wrapper > h1 { font-size: 24px;  }
+  .br-passes { display: none;}
+  .passes-wrapper { padding: 76px 0px 0 0;}
+  .passes-wrapper > div { padding: 50px 0 121px 0;}
+  .links-container { grid-template-columns: repeat(2, 1fr); row-gap: 72px;}
+  .legal { grid-template-columns: 1fr;}
+  .legal > div:nth-of-type(1) { font-size: 14px; margin-bottom: 12px; text-align: center;}
+  .legal > div:nth-of-type(2) { font-size: 10px; }
+  .legal > div:nth-of-type(3) { font-size: 10px; }
+  .footer-align { padding-top: 60px; padding-bottom: 34px;}
 
 }
 
 @media screen and (max-width: 400px) {
   .map-area h1 { font-size: 22px; line-height: 28px;}
   .resort-header { font-size: 22px; line-height: 28px; }
-  
+  .card-overlay-rel > div { transform: translate(50%, 150%);}
+
 
 }
 
