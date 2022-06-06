@@ -205,7 +205,7 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .bp-wrapper { display: grid; grid-template-columns: repeat(2, 1fr);  padding: 0 24px 24px 24px;}
   .bp-single-item { padding: 20px 0; }
   .gen-btn {  grid-column: span 2 / span 2; justify-content: center; margin-top: 30px;}
-  .bp-single-item > select {  width: 100%;}
+  .bp-single-item > select {  width: 100%; -webkit-min-logical-width: 100%; -webkit-appearance: none;}
   .map-area h1 { font-size: 34px; line-height: 44px; padding-bottom: 27px;}
   .resort-header { font-size: 34px; line-height: 44px; padding-bottom: 27px; }
   .passes-wrapper > h1 { font-size: 52px; line-height: 88px; }
@@ -300,8 +300,6 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .map-area h1 { font-size: 22px; line-height: 28px;}
   .resort-header { font-size: 22px; line-height: 28px; }
   .card-overlay-rel > div { transform: translate(50%, 150%);}
-
-
 }
 
 
@@ -311,29 +309,26 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 
 
 
+.form-group-wrapper {  display: flex; align-items: center; justify-content: center; min-height: 100vh;}
+.form-group { max-width: 450px; width: 100%; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); border-radius: 8px; background: var(--white);}
+.form-logo { background: linear-gradient(to right, #141e30, #243b55); margin-bottom: 20px; padding: 14px 0; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center; }
+.form-logo .logo-wrapper { width: 100% !important;}
+.btn-class-form { background: var(--primaryBlue); color: var(--creamsonWhite); width: 100%; padding: 8px 0; font-size: 16px; border-radius: 7px; margin-bottom: 30px;}
+.form-group > form { max-width: 400px; margin: 0 auto;}
 
 
 
 
 
 
-
-
-
-
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-
-body{
-  background: #000;
-}
 .wrapper{
-  width: 450px;
+  /* width: 450px; */
   background: #fff;
-  padding: 30px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  padding: 10px 0 30px 0;
+  
 }
 .wrapper .input-data{
-  height: 40px;
+  /* height: 40px; */
   width: 100%;
   position: relative;
 }
@@ -342,45 +337,34 @@ body{
   width: 100%;
   border: none;
   outline: none;
-  font-size: 17px;
-  border-bottom: 2px solid silver;
+  font-size: 16px;
+  border-bottom: 1px solid #e1e1e1;
 }
 .input-data input:focus ~ label,
-.input-data input:valid ~ label{
-  transform: translateY(-20px);
-  font-size: 15px;
-  color: #4158d0;
-}
+.input-data input:valid ~ label{ transform: translateY(-20px); font-size: 13px; color: #4158d0; opacity: 0.5;}
 .wrapper .input-data label{
   position: absolute;
-  bottom: 10px;
+  bottom: 5px;
   left: 0;
   color: grey;
   pointer-events: none;
   transition: all 0.3s ease;
 }
 
-.input-data .underline{
-  position: absolute;
-  height: 2px;
-  width: 100%;
-  bottom: 0;
-}
+.input-data .underline{ position: absolute; height: 2px; width: 100%; bottom: 0;}
 
 .input-data .underline:before{
   position: absolute;
   content: "";
   height: 100%;
   width: 100%;
-  background: #4158d0;
+  background: var(--primaryBlue);
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.3s ease;
 }
 .input-data input:focus ~ .underline:before,
-.input-data input:valid ~ .underline:before{
-  transform: scaleX(1);
-}
+.input-data input:valid ~ .underline:before{ transform: scaleX(1); }
 
 
 

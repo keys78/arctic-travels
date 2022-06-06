@@ -32,7 +32,6 @@ const Navbar = () => {
                     <div className='el-wrap'>
                         <img className='el-logo' src="/images/dotted_circle.png" height={'40px'} width={'40px'} />
                         <img className='el-plane' src="/images/angular_plane.png" height={'40px'} width={'40px'} />
-
                     </div>
                     <span className='font-bold text-white'>Arctic Travels</span>
                 </div>
