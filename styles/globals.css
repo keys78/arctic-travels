@@ -237,8 +237,6 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .bp-single-item > select {  width: 100%;}
   .map-area h1 { font-size: 34px; line-height: 44px; padding-bottom: 27px;}
   .resort-header { font-size: 34px; line-height: 44px; padding-bottom: 27px; }
-
-
 }
 
 @media screen and (max-width: 1024px) {
