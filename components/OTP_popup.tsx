@@ -42,7 +42,7 @@ const OTPField = ({ }: Props) => {
     return (
         <div className="otp-wrapper">
             <div>
-                <h1></h1>
+                <h1>Please enter OTP to verify account</h1>
                 <h1>OTP has been sent to your email</h1>
             </div>
             <form onSubmit={verifyOTP}>
