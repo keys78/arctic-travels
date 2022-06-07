@@ -331,7 +331,7 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   bottom: 5px;
   left: 0;
   font-size: 14px;
-  color: rgb(188, 188, 188);
+  color: rgb(165, 164, 164);
   pointer-events: none;
   transition: all 0.3s ease;
 }
@@ -371,3 +371,5 @@ input:-webkit-autofill:active  {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* https://stackoverflow.com/questions/41698357/how-to-partition-input-field-to-appear-as-separate-input-fields-on-screen */
+/* https://gist.github.com/midhunmonachan/3c2fb506cab7e63ffbbd94080a0d2d80 */
