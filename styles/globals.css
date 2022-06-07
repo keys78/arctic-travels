@@ -332,6 +332,8 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   margin: 0;
 }
 
+.otp-form { display: flex;}
+
 
 /* OTP */
 /* .otp-input {

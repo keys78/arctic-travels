@@ -34,34 +34,38 @@ const OTPField = ({ }: Props) => {
         inputRef.current?.focus();
     }, [activeOTPIndex])
 
-    // useEffect(() => {
-    //     window.addEventListener("paste", (e) => {
-    //         setOtp(e.clipboardData.getData("text"));
-    //       });
-    // })
+    const verifyOTP = () => {
+        console.log(otp)
+    }
 
 
     return (
-        <div className="h-screen flex justify-center items-center space-x-2">
-            {otp.map((_, index) => {
-                return (
-                    <React.Fragment key={index}>
-                        <input
-                            ref={index === activeOTPIndex ? inputRef : null}
-
-                            type="number"
-                            className="otp-input"
-                            onChange={handleOnChange}
-                            value={otp[index]}
-                            onKeyDown={(e) => handleOnKeyDown(e, index)}
-                            // onPaste={(e) => handleOnPaste(e, index)}
-                        />
-                        {/* {index === otp.length - 1 ? null : (
-                            <span className="w-2 py-0.5 bg-gray-400" />
-                        )} */}
-                    </React.Fragment>
-                );
-            })}
+        <div className="otp-wrapper">
+            <div>
+                <h1></h1>
+                <h1>OTP has been sent to your email</h1>
+            </div>
+            <form onSubmit={verifyOTP}>
+                <div className="otp-form">
+                    {otp.map((_, index) => {
+                        return (
+                            <div>
+                                <React.Fragment key={index}>
+                                    <input
+                                        ref={index === activeOTPIndex ? inputRef : null}
+                                        type="number"
+                                        className="otp-input"
+                                        onChange={handleOnChange}
+                                        value={otp[index]}
+                                        onKeyDown={(e) => handleOnKeyDown(e, index)}
+                                    />
+                                </React.Fragment>
+                            </div>
+                        );
+                    })}
+                </div>
+                <button type="submit">Verify Otp</button>
+            </form>
         </div>
     );
 };
