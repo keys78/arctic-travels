@@ -293,7 +293,7 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
   .legal > div:nth-of-type(2) { font-size: 10px; }
   .legal > div:nth-of-type(3) { font-size: 10px; }
   .footer-align { padding-top: 60px; padding-bottom: 34px;}
-
+  .form-group { margin-top: -70px;}
 }
 
 @media screen and (max-width: 400px) {
@@ -310,48 +310,39 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 
 
 .form-group-wrapper {  display: flex; align-items: center; justify-content: center; min-height: 100vh;}
-.form-group { max-width: 450px; width: 100%; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); border-radius: 8px; background: var(--white);}
-.form-logo { background: linear-gradient(to right, #141e30, #243b55); margin-bottom: 20px; padding: 14px 0; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center; }
+.form-group { max-width: 450px; margin: 0 10px;  width: 100%; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); border-radius: 8px; background: var(--white);}
+.form-logo { background: linear-gradient(to right, #141e30, #243b55); margin-bottom: 40px; padding: 14px 0; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center; }
 .form-logo .logo-wrapper { width: 100% !important;}
-.btn-class-form { background: var(--primaryBlue); color: var(--creamsonWhite); width: 100%; padding: 8px 0; font-size: 16px; border-radius: 7px; margin-bottom: 30px;}
-.form-group > form { max-width: 400px; margin: 0 auto;}
+.btn-class-form { background: var(--primaryBlue); color: var(--creamsonWhite); width: 100%; padding: 8px 0; font-size: 16px; border-radius: 7px; margin-bottom: 10px;}
+.ready-span { font-size: 14px; font-weight: 400; float: right; margin-top: 12px;}
+.ready-span  span { color: var(--primaryBlue); text-decoration: underline; }
+.form-group > form { max-width: 400px;  padding:0 10px 50px 10px; margin: 0 auto;}
 
 
 
 
-
-
-.wrapper{
-  /* width: 450px; */
-  background: #fff;
-  padding: 10px 0 30px 0;
-  
-}
-.wrapper .input-data{
-  /* height: 40px; */
-  width: 100%;
-  position: relative;
-}
-.wrapper .input-data input{
-  height: 100%;
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  border-bottom: 1px solid #e1e1e1;
-}
+.wrapper{ background: #fff; padding: 10px 0 30px 0;}
+.wrapper .input-data{ width: 100%; position: relative;}
+.wrapper .input-data input{ height: 100%; width: 100%; border: none; outline: none; font-size: 16px; border-bottom: 1px solid #e1e1e1;}
 .input-data input:focus ~ label,
 .input-data input:valid ~ label{ transform: translateY(-20px); font-size: 13px; color: #4158d0; opacity: 0.5;}
 .wrapper .input-data label{
   position: absolute;
   bottom: 5px;
   left: 0;
-  color: grey;
+  font-size: 14px;
+  color: rgb(188, 188, 188);
   pointer-events: none;
   transition: all 0.3s ease;
 }
 
 .input-data .underline{ position: absolute; height: 2px; width: 100%; bottom: 0;}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 
 .input-data .underline:before{
   position: absolute;
