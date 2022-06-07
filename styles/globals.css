@@ -304,6 +304,68 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 
 
 
+.otp-pop {
+  background: rgb(213, 66, 66);
+  z-index: 9999999;
+  color: #fff;
+  width: 100vw;
+  position: fixed;
+  height: 100vh;
+}
+
+.otp-input {
+  border: 1px solid #53535365;
+  height: 50px; width: 40px;
+  font-size: 20px; text-align: center; border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.otp-input:focus {
+  background: rgb(170, 233, 225);
+  border-color: #EBEDF3;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* OTP */
+/* .otp-input {
+  -webkit-transition: none;
+  transition: none;
+  width: 32px;
+  height: 32px;
+  text-align: center
+}
+
+.otp-input:focus {
+  color: #3F4254;
+  background-color: #ffffff;
+  border-color: #884377;
+  outline: 0;
+}
+
+.otp-input.otp-input-solid {
+  background-color: #F3F6F9;
+  border-color: #F3F6F9;
+  color: #3F4254;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.otp-input.otp-input-solid:active,
+.otp-input.otp-input-solid.active,
+.otp-input.otp-input-solid:focus,
+.otp-input.otp-input-solid.focus {
+  background-color: #EBEDF3;
+  border-color: #EBEDF3;
+  color: #3F4254;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+ */
 
 
 
