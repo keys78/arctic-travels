@@ -7,7 +7,7 @@ import { footerLinksDetails } from '../utils/data'
 
 const Footer = () => {
     const renderFooterLinks = footerLinksDetails && footerLinksDetails.map(({ title, links }, i) =>
-        <FooterLinks header={title} links={links} />
+        <FooterLinks key={i} header={title} links={links} />
     )
 
     return (
