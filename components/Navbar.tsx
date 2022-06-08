@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NavLinks from './NavLinks';
 import Link from 'next/link';
+import Image from 'next/image';
 import { navLinks } from '../utils/data';
 
 
@@ -61,7 +62,7 @@ const Navbar = () => {
                     </div>
 
                     <div className='close-sidenav' onClick={() => setIsActiveBurger(!isActiveBurger)}>
-                        X
+                        <Image src="/images/x-circle.png" width="50px" height="50px"  />
                     </div>
                 </div>
             }
