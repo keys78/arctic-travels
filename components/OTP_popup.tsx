@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { FC, useState, useRef, useEffect } from "react";
 
 interface Props { }
@@ -54,16 +55,19 @@ const OTPField = ({ }: Props) => {
 
         const allEqual = otp.every(v => v === otp[0])
         if (allEqual === true) return setIsLocked(!isLocked)
-        setAnimate(!animate)
+        else setIsLocked(false)
+        setAnimate(true)
+
         setTimeout(() => {
-            setAnimate(!animate)
-        },0.001)
+            setAnimate(false)
+        }, 1000)
     }
 
 
 
     return (
         <div className="otp-wrapper">
+            <Link href={'/'}><a>Back</a></Link>
             <div className="otp-container">
                 <div className={`container-lock ${!isLocked ? 'otp-null' : 'unlocked otp-success'}`}>
                     <span className={`lock ${!isLocked ? (animate && 'lock-shake') : 'unlocked'}`}></span>

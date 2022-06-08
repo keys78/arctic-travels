@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Input from '../components/Input'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 
 const signin = () => {
   const router = useRouter()
@@ -25,8 +26,20 @@ const signin = () => {
   //   console.log(values);
   // }, [values]); 
 
+  const variants = {
+    hidden: { opacity: 0, x: -200, y: 0 },
+    enter: { opacity: 1, x: 0, y: 0 },
+    exit: { opacity: 0, x: 0, y: -100 },
+  }
+
   return (
-    <div className='form-group-wrapper'>
+    <motion.div
+      variants={variants} // Pass the variant object into Framer Motion 
+      initial="hidden" // Set the initial state to variants.hidden
+      animate="enter" // Animated state to variants.enter
+      exit="exit" // Exit state (used later) to variants.exit
+      transition={{ type: 'linear' }} // Set the transition to linear
+      className='form-group-wrapper'>
       <div className='form-group'>
         <div className='form-logo'>
           <div onClick={() => router.push('/')} className="logo-wrapper cursor-default flex items-center justify-center space-x-3">
@@ -47,8 +60,8 @@ const signin = () => {
           <span className='ready-span'>Already have an account? <Link href={'/login'}><a><span>Login</span></a></Link></span>
         </form>
       </div>
-    </div>
-  ) 
+    </motion.div>
+  )
 }
 
 export default signin
