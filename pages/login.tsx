@@ -23,8 +23,8 @@ const login = () => {
 
   return (
     <div className='form-group-wrapper'>
-      {/* <OTP_popup /> */}
-      <div className='form-group'>
+      <OTP_popup />
+      {/* <div className='form-group'>
         <div className='form-logo'>
           <div onClick={() => router.push('/')} className="logo-wrapper cursor-default flex items-center justify-center space-x-3">
             <div className='el-wrap'>
@@ -40,7 +40,7 @@ const login = () => {
           <button className='btn-class-form'>Login In</button>
           <span className='ready-span'>Don't have an account? <Link href={'/signin'}><a><span>sign in</span></a></Link></span>
         </form>
-      </div>
+      </div> */}
     </div>
   ) 
 }

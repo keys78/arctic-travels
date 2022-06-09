@@ -67,7 +67,7 @@ const OTPField = ({ }: Props) => {
 
     return (
         <div className="otp-wrapper">
-            <Link href={'/'}><a>Back</a></Link>
+            {/* <Link href={'/'}><a>Back</a></Link> */}
             <div className="otp-container">
                 <div className={`container-lock ${!isLocked ? 'otp-null' : 'unlocked otp-success'}`}>
                     <span className={`lock ${!isLocked ? (animate && 'lock-shake') : 'unlocked'}`}></span>
