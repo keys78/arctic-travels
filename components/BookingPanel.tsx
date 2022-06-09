@@ -46,7 +46,7 @@ const BookingPanel = () => {
                 <h1 className='bp-title'>{val.title}</h1>
             </div>
 
-            {val.title === 'location' && <select > {renderList} </select>}
+            {val.title === 'location' && <div className="select-container"><select > {renderList} </select></div>}
             {val.title === 'person' && <select > {renderPersons} </select>}
             {val.title === 'check out' && <input type={'date'} name={testst} />}
             {val.title === 'check in' && <input type={'date'} />}

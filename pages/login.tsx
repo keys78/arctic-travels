@@ -25,11 +25,11 @@ const login = () => {
 
   return (
     <motion.div className='form-group-wrapper'
-    variants={variants} 
-    initial="hidden" 
-    animate="enter" 
-    exit="exit"
-    transition={{ type: 'linear' }} 
+      variants={variants}
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      transition={{ type: 'linear' }}
     >
       {/* <OTP_popup /> */}
       <div className='form-group'>
@@ -48,8 +48,8 @@ const login = () => {
           <button className='btn-class-form'>Login In</button>
           <span className='ready-span'>Don't have an account? <Link href={'/signin'}><a><span>sign in</span></a></Link></span>
         </form>
-      </div>
-    </motion.div>
+      </div >
+    </motion.div >
   ) 
 }
 
