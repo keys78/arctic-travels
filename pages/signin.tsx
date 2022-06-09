@@ -3,6 +3,7 @@ import Input from '../components/Input'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { variants } from '../utils/data';
 
 const signin = () => {
   const router = useRouter()
@@ -26,19 +27,14 @@ const signin = () => {
   //   console.log(values);
   // }, [values]); 
 
-  const variants = {
-    hidden: { opacity: 0, x: -200, y: 0 },
-    enter: { opacity: 1, x: 0, y: 0 },
-    exit: { opacity: 0, x: 0, y: -100 },
-  }
 
   return (
     <motion.div
-      variants={variants} // Pass the variant object into Framer Motion 
-      initial="hidden" // Set the initial state to variants.hidden
-      animate="enter" // Animated state to variants.enter
-      exit="exit" // Exit state (used later) to variants.exit
-      transition={{ type: 'linear' }} // Set the transition to linear
+      variants={variants} 
+      initial="hidden" 
+      animate="enter" 
+      exit="exit"
+      transition={{ type: 'linear' }} 
       className='form-group-wrapper'>
       <div className='form-group'>
         <div className='form-logo'>

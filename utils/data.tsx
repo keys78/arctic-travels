@@ -46,6 +46,13 @@ export const navLinks: { title: string; href: string }[] = [
 ]
 
 
+export const variants = {
+    hidden: { opacity: 0, x: -200, y: 0 },
+    enter: { opacity: 1, x: 0, y: 0 },
+    exit: { opacity: 0, x: 0, y: -100 },
+  }
+
+
 export const personsList = [
     "1 Person", "2 Persons", "3 Persons", "4 Persons"
 ]

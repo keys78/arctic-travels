@@ -3,6 +3,8 @@ import Input from '../components/Input'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import OTP_popup from '../components/OTP_popup';
+import { variants } from '../utils/data';
+import { motion } from 'framer-motion';
 
 const login = () => {
   const router = useRouter()
@@ -22,7 +24,13 @@ const login = () => {
 
 
   return (
-    <div className='form-group-wrapper'>
+    <motion.div className='form-group-wrapper'
+    variants={variants} 
+    initial="hidden" 
+    animate="enter" 
+    exit="exit"
+    transition={{ type: 'linear' }} 
+    >
       {/* <OTP_popup /> */}
       <div className='form-group'>
         <div className='form-logo'>
@@ -41,7 +49,7 @@ const login = () => {
           <span className='ready-span'>Don't have an account? <Link href={'/signin'}><a><span>sign in</span></a></Link></span>
         </form>
       </div>
-    </div>
+    </motion.div>
   ) 
 }
 
