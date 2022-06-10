@@ -1,7 +1,7 @@
 require('dotenv').config({ path: "./config.env" });
 const express = require('express');
 const connectDB = require('./config/db');
-const errorHandler = require('./middlewares/error')
+// const errorHandler = require('./middlewares/error')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
@@ -10,8 +10,6 @@ const bodyParser = require('body-parser')
 connectDB();
 const app = express();
 app.use(express.json());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 10000 }));
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -24,12 +22,12 @@ app.use('/auth', require('./routes/auth'));
 app.use('/private', require('./routes/private'));
 
 app.get("/", (req, res) =>
-  res.json({ success: true, message: "e-school-api is running!" })
+  res.json({ success: true, message: "arctic-travels-api is running!" })
 );
 
 // app.use('api', fileRoutes.)
 // Error Handler ( Should be last piece of middleware)
-app.use(errorHandler);
+// app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 4000
