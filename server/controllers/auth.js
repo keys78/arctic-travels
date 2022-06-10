@@ -2,6 +2,7 @@ const crypto = require("crypto")
 const User = require('../models/user');
 const ErrorResponse = require('../utils/errorResponse')
 const sendEmail = require('../utils/sendEmail')
+const Token = require('../models/token')
 // const bcrypt = require("bcryptjs")
 
 
@@ -11,26 +12,24 @@ const sendEmail = require('../utils/sendEmail')
 
 
 exports.register = async (userDetails, role, res, next) => {
-    const Token = {
-        userId: res.id,
-        token: crypto.randomBytes(32).toString("hex")
-    }
+ 
 
     try {
         const user = await User.create({
             ...userDetails, role
         });
 
-        // res.send({ status: 'success', message: "user registration success", data: user })
+
         const token = await new Token({
-            userId: res.id,
+            userId: user._id,
             token: crypto.randomBytes(32).toString("hex"),
-        })
+        }).save();
 
         const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+
         await sendEmail({
             to: user.email,
-            subject: "Password Reset Request",
+            subject: "Email verification",
             text: url
         });
 
