@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { register, login, verifyEmail } = require('../controllers/auth')
+const { register, login, verifyEmail } = require('../controllers/auth');
+const { getUser } = require('../controllers/private');
 
 router.post("/register", async (req, res, next) => { await register(req.body, 'user', res, next) });
 
