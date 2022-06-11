@@ -21,8 +21,10 @@ const UserSchema = new mongoose.Schema({
             "Please provide a valid email"
         ]
     },
-    
+
     verified: { type: Boolean, default: false },
+    otpStatus: {type: String, default: 'inactive'},
+    otpStatus: {type: Boolean, default: false },
 
     password: {
         type: String,
