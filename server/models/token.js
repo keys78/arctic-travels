@@ -1,26 +1,3 @@
-// const crypto = require("crypto")
-// const mongoose = require('mongoose');
-
-
-
-// const UserVerificationSchema = new mongoose.Schema({
-//     userId: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         required: true,
-//         ref: 'user',
-//         unique: true
-//     },
-//     token: { type: String, required: true },
-//     CreatedAt: { type: Date, default: Date.now(), expires: 3600, } //1hout
-
-// })
-
-
-// const UserVerification = mongoose.model("user", UserVerificationSchema)
-
-// module.exports = UserVerification
-
-
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

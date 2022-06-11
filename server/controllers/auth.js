@@ -3,21 +3,16 @@ const User = require('../models/user');
 const ErrorResponse = require('../utils/errorResponse')
 const sendEmail = require('../utils/sendEmail')
 const Token = require('../models/token')
-// const bcrypt = require("bcryptjs")
-
-
-
 
 
 
 
 exports.register = async (userDetails, role, res, next) => {
- 
+
     try {
         const user = await User.create({
             ...userDetails, role
         });
-
 
         const token = await new Token({
             userId: user._id,
@@ -26,15 +21,13 @@ exports.register = async (userDetails, role, res, next) => {
 
         const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-        await sendEmail({
+        sendEmail({
             to: user.email,
             subject: "Email verification",
             text: url
         });
 
-        res
-			.status(201)
-			.send({ message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, data: {token: token.token, id:user.id}});
+        res.json({ success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201 })
 
 
     } catch (error) {
@@ -64,7 +57,25 @@ exports.login = async (req, res, next) => {
         }
 
 
-        res.send({ status: 'success', message: "login success", data: user })
+        if (!user.verified) {
+            const token = await new Token({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString("hex"),
+            }).save();
+
+            const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+
+            sendEmail({
+                to: user.email,
+                subject: "Email verification",
+                text: url
+            });
+
+            res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
+
+        }
+
+        return next(new ErrorResponse('login success', 201))
 
     } catch (error) {
         next(error)
@@ -75,21 +86,24 @@ exports.login = async (req, res, next) => {
 exports.verifyEmail = async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
-	try {
-		// const user = await User.findOne({ _id: req.params.id });
-		if (!user) return res.status(400).send({ message: "Invalid link" });
+    try {
+        if (!user) return res.status(400).send({ message: "Invalid link" });
 
-		const token = await Token.findOne({
-			userId: user._id,
-			token: req.params.token,
-		});
-		if (!token) return res.status(400).send({ message: "Invalid link" });
+        const token = await Token.findOne({
+            userId: user._id,
+            token: req.params.token,
+        });
+        if (!token) return res.status(400).send({ message: "Invalid link" });
 
-		await User.updateOne({ _id: user._id, verified: true });
-		await token.remove();
+        user.verified = true
+        await user.save();
+        await token.remove();
 
-		res.status(200).send({ message: "Email verified successfully" });
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error kiil am" });
-	}
+        res.json({ success: true, message: `Email Verified Successfully`, status: 202 })
+
+
+    } catch (error) {
+        return next(new ErrorResponse('Internal Server Error kiil am', 500))
+
+    }
 };
