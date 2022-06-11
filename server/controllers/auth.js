@@ -86,6 +86,9 @@ exports.verifyEmail = async (req, res, next) => {
 		if (!token) return res.status(400).send({ message: "Invalid link" });
 
 		await User.updateOne({ _id: user._id, verified: true });
+        
+        user.verified = true
+        await user.save();
 		await token.remove();
 
 		res.status(200).send({ message: "Email verified successfully" });
