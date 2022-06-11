@@ -13,7 +13,6 @@ const Token = require('../models/token')
 
 exports.register = async (userDetails, role, res, next) => {
  
-
     try {
         const user = await User.create({
             ...userDetails, role
@@ -35,7 +34,7 @@ exports.register = async (userDetails, role, res, next) => {
 
         res
 			.status(201)
-			.send({ message: "An Email sent to your account please verify" });
+			.send({ message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, data: {token: token.token, id:user.id}});
 
 
     } catch (error) {
@@ -70,4 +69,27 @@ exports.login = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+};
+
+
+exports.verifyEmail = async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+	try {
+		// const user = await User.findOne({ _id: req.params.id });
+		if (!user) return res.status(400).send({ message: "Invalid link" });
+
+		const token = await Token.findOne({
+			userId: user._id,
+			token: req.params.token,
+		});
+		if (!token) return res.status(400).send({ message: "Invalid link" });
+
+		await User.updateOne({ _id: user._id, verified: true });
+		await token.remove();
+
+		res.status(200).send({ message: "Email verified successfully" });
+	} catch (error) {
+		res.status(500).send({ message: "Internal Server Error kiil am" });
+	}
 };

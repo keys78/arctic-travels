@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const connectDB = () => {
-    // mongoose.connect('mongodb://localhost:27017/arctic-travels', {
-    mongoose.connect(process.env.MONGO_URI, {
+    mongoose.connect('mongodb://localhost:27017/arctic-travels', {
+    // mongoose.connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         // useCreateIndex: true,
         // useUnfiedTopology: true,
