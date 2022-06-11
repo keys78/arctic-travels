@@ -84,7 +84,7 @@ exports.login = async (req, res, next) => {
 
 
 exports.verifyEmail = async (req, res, next) => {
-    const user = await User.findById(req.params.id);
+    const user = User.findById(req.params.id);
 
     try {
         if (!user) return res.status(400).send({ message: "Invalid link" });
