@@ -107,3 +107,5 @@ exports.verifyEmail = async (req, res, next) => {
 
     }
 };
+
+exports.verifyOTP = async (req, res, next) => {}
