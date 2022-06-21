@@ -89,15 +89,8 @@ exports.verifyEmail = async (req, res, next) => {
     try {
         if (!user) return res.status(400).send({ message: "Invalid link" });
 
-        const token = await Token.findOne({
-            userId: user._id,
-            token: req.params.token,
-        });
-        if (!token) return res.status(400).send({ message: "Invalid link" });
-
         user.verified = true
         await user.save();
-        await token.remove();
 
         res.json({ success: true, message: `Email Verified Successfully`, status: 202 })
 
