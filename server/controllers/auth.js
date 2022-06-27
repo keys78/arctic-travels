@@ -3,6 +3,8 @@ const User = require('../models/user');
 const ErrorResponse = require('../utils/errorResponse')
 const sendEmail = require('../utils/sendEmail')
 const Token = require('../models/token')
+const OTP = require('../models/otp');
+const generateCode = require("../utils/otpGenerator");
 
 
 
@@ -21,21 +23,22 @@ exports.register = async (userDetails, role, res, next) => {
             ...userDetails, role
         });
 
-        const token = await new Token({
-            userId: user._id,
-            token: crypto.randomBytes(32).toString("hex"),
-        }).save();
+        // const token = await new Token({
+        //     userId: user._id,
+        //     token: crypto.randomBytes(32).toString("hex"),
+        // }).save();
 
-        const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+        // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-        sendEmail({
-            to: user.email,
-            subject: "Email verification",
-            text: url
-        });
+        // sendEmail({
+        //     to: user.email,
+        //     subject: "Email verification",
+        //     text: url
+        // });
 
-        res.json({ success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`,
-        id: user.id, token:token, status: 201 })
+        res.json({
+            success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201
+        })
 
 
     } catch (error) {
@@ -79,12 +82,27 @@ exports.login = async (req, res, next) => {
                 text: url
             });
 
-           return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
+            return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
 
         }
 
-        if(user.two_fa_status === 'off') {
-            return res.json({ success: false, message:`please enter the OTP sent to your email to continue`})
+        if (user.two_fa_status === 'on') {
+
+            // var id = user._id;
+            // OTP.findById(id, function (err, docs) {
+            //     if (err) { console.log(err); }
+            //     console.log(docs)
+            // });
+            const otp = await new OTP ({
+                userId: user._id,
+                otp: generateCode()
+            }).save();
+
+            user.OTP_code = otp.otp
+            await user.save();
+            await otp.remove()
+
+            return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
         }
 
         return res.json({ success: true, message: `login success`, status: 201 })

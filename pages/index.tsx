@@ -12,9 +12,19 @@ import { motion } from 'framer-motion'
 import { variants } from '../utils/data';
 
 
+
+
 const Home: NextPage = () => {
 
-  return (
+//   const generateCode = () => {
+//     let id = ''
+//     id += String(Math.random()).slice(2, 8)
+//     return id
+// }
+
+// console.log(generateCode())
+
+   return (
     <motion.main
       variants={variants}
       initial="hidden" 
@@ -36,6 +46,7 @@ const Home: NextPage = () => {
       <Passes />
       <Footer />
     </motion.main>
+    
   )
 }
 
