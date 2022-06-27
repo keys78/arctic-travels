@@ -10,6 +10,13 @@ const Token = require('../models/token')
 exports.register = async (userDetails, role, res, next) => {
 
     try {
+        const { email } = userDetails;
+
+        const isUserRegistered = await User.findOne({ email })
+        if (isUserRegistered) {
+            return next(new ErrorResponse('account already exist, try login', 401))
+        }
+
         const user = await User.create({
             ...userDetails, role
         });
@@ -27,7 +34,8 @@ exports.register = async (userDetails, role, res, next) => {
             text: url
         });
 
-        res.json({ success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201 })
+        res.json({ success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`,
+        id: user.id, token:token, status: 201 })
 
 
     } catch (error) {
@@ -71,11 +79,15 @@ exports.login = async (req, res, next) => {
                 text: url
             });
 
-            res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
+           return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
 
         }
 
-        return next(new ErrorResponse('login success', 201))
+        if(user.two_fa_status === 'off') {
+            return res.json({ success: false, message:`please enter the OTP sent to your email to continue`})
+        }
+
+        return res.json({ success: true, message: `login success`, status: 201 })
 
     } catch (error) {
         next(error)
@@ -84,7 +96,7 @@ exports.login = async (req, res, next) => {
 
 
 exports.verifyEmail = async (req, res, next) => {
-    const user = User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
 
     try {
         if (!user) return res.status(400).send({ message: "Invalid link" });
@@ -93,7 +105,7 @@ exports.verifyEmail = async (req, res, next) => {
             userId: user._id,
             token: req.params.token,
         });
-        if (!token) return res.status(400).send({ message: "Invalid link" });
+        if (!token) return res.status(400).send({ message: "Invalid linky" });
 
         user.verified = true
         await user.save();
@@ -108,4 +120,53 @@ exports.verifyEmail = async (req, res, next) => {
     }
 };
 
-exports.verifyOTP = async (req, res, next) => {}
+exports.verifyOTP = async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    try {
+        if (!user) return res.status(400).send({ message: "invalid token" });
+
+        const token = await Token.findOne({
+            userId: user._id,
+            token: req.params.token,
+        });
+        if (!token) return res.status(400).send({ message: "Invalid linky" });
+
+        user.verified = true
+        await user.save();
+        await token.remove();
+
+        res.json({ success: true, message: `Email Verified Successfully`, status: 202 })
+
+
+    } catch (error) {
+        return next(new ErrorResponse('Internal Server Error kiil am', 500))
+
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// exports.verifyEmail =  async (req, res) => {
+// 	try {
+// 		const user = await User.findOne({ _id: req.params.id });
+// 		if (!user) return res.status(400).send({ message: "Invalid link" });
+// 		const token = await Token.findOne({	userId: user._id,token: req.params.token,	});
+// 		if (!token) return res.status(400).send({ message: "Invalid link" });
+// 		await User.updateOne({ _id: user._id, verified: true });
+// 		await token.remove();
+// 		res.status(200).send({ message: "Email verified successfully" });
+// 	} catch (error) {res.status(500).send({ message: "Internal Server Error" });}}
