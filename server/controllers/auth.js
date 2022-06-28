@@ -88,11 +88,6 @@ exports.login = async (req, res, next) => {
 
         if (user.two_fa_status === 'on') {
 
-            // var id = user._id;
-            // OTP.findById(id, function (err, docs) {
-            //     if (err) { console.log(err); }
-            //     console.log(docs)
-            // });
             const otp = await new OTP ({
                 userId: user._id,
                 otp: generateCode()
@@ -100,7 +95,10 @@ exports.login = async (req, res, next) => {
 
             user.OTP_code = otp.otp
             await user.save();
-            await otp.remove()
+            setTimeout(() => {
+                user.OTP_code = null
+            }, 5000)
+            await otp.remove();
 
             return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
         }
@@ -111,6 +109,7 @@ exports.login = async (req, res, next) => {
         next(error)
     }
 };
+
 
 
 exports.verifyEmail = async (req, res, next) => {
@@ -140,25 +139,21 @@ exports.verifyEmail = async (req, res, next) => {
 
 exports.verifyOTP = async (req, res, next) => {
     const user = await User.findById(req.params.id);
+    const { otp } = req.body
 
     try {
-        if (!user) return res.status(400).send({ message: "invalid token" });
+        if (!user) return res.status(400).send({ message: "invalid user" });
 
-        const token = await Token.findOne({
-            userId: user._id,
-            token: req.params.token,
-        });
-        if (!token) return res.status(400).send({ message: "Invalid linky" });
-
-        user.verified = true
+        if(otp !== user.OTP_code) {
+            return next(new ErrorResponse('Error, bad request', 400))
+        }
+        
+        user.OTP_code = null
         await user.save();
-        await token.remove();
-
-        res.json({ success: true, message: `Email Verified Successfully`, status: 202 })
-
+        return res.json({ success: true, message: `login success`, status: 201 })
 
     } catch (error) {
-        return next(new ErrorResponse('Internal Server Error kiil am', 500))
+        return next(new ErrorResponse('Internal Server', 500))
 
     }
 };

@@ -24,7 +24,14 @@ const UserSchema = new mongoose.Schema({
 
     verified: { type: Boolean, default: false },
     two_fa_status: {type: String, default: 'on'},
-    OTP_code: { type: String },
+    OTP_code: { type: String, 
+        index: {
+            unique: true,
+            expireAfterSeconds:5,
+            partialFilterExpression: { status: 'PENDING' }
+          },
+        //   default : null
+    },
     // otpStatus: {type: Boolean, default: false },
 
     password: {
