@@ -95,9 +95,6 @@ exports.login = async (req, res, next) => {
 
             user.OTP_code = otp.otp
             await user.save();
-            setTimeout(() => {
-                user.OTP_code = null
-            }, 5000)
             await otp.remove();
 
             return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
