@@ -23,12 +23,12 @@ exports.register = async (userDetails, role, res, next) => {
             ...userDetails, role
         });
 
-        // const token = await new Token({
-        //     userId: user._id,
-        //     token: crypto.randomBytes(32).toString("hex"),
-        // }).save();
+        const token = await new Token({
+            userId: user._id,
+            token: crypto.randomBytes(32).toString("hex"),
+        }).save();
 
-        // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+        const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
         // sendEmail({
         //     to: user.email,
@@ -76,11 +76,11 @@ exports.login = async (req, res, next) => {
 
             const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-            sendEmail({
-                to: user.email,
-                subject: "Email verification",
-                text: url
-            });
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "Email verification",
+            //     text: url
+            // });
 
             return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
 
@@ -95,12 +95,20 @@ exports.login = async (req, res, next) => {
 
             user.OTP_code = otp.otp
             await user.save();
+
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "One Time Password",
+            //     text: otp.otp
+            // });
+
             await otp.remove();
 
             return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
         }
 
-        return res.json({ success: true, message: `login success`, status: 201 })
+        // return res.json({ success: true, message: `login success`, status: 201 })
+        sendToken(user, 200, res);
 
     } catch (error) {
         next(error)
@@ -142,12 +150,13 @@ exports.verifyOTP = async (req, res, next) => {
         if (!user) return res.status(400).send({ message: "invalid user" });
 
         if(otp !== user.OTP_code) {
-            return next(new ErrorResponse('Error, bad request', 400))
+            return next(new ErrorResponse('invalid token, please try again', 400))
         }
         
         user.OTP_code = null
         await user.save();
-        return res.json({ success: true, message: `login success`, status: 201 })
+        // return res.json({ success: true, message: `login success`, status: 201 })
+        sendToken(user, 200, res);
 
     } catch (error) {
         return next(new ErrorResponse('Internal Server', 500))
@@ -157,6 +166,10 @@ exports.verifyOTP = async (req, res, next) => {
 
 
 
+const sendToken = (user, statusCode, res) => {
+    const token = user.getSignedToken();
+    res.status(statusCode).json({ success: true, data: user.username, token })
+}
 
 
 

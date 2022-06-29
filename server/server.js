@@ -1,7 +1,7 @@
 require('dotenv').config({ path: "./config.env" });
 const express = require('express');
 const connectDB = require('./config/db');
-// const errorHandler = require('./middlewares/error')
+const errorHandler = require('./middlewares/error')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
@@ -27,7 +27,7 @@ app.get("/", (req, res) =>
 
 // app.use('api', fileRoutes.)
 // Error Handler ( Should be last piece of middleware)
-// app.use(errorHandler);
+app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 4000
