@@ -1,7 +1,7 @@
 const crypto = require("crypto")
 const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs")
-// const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
 
 const UserSchema = new mongoose.Schema({
@@ -32,7 +32,6 @@ const UserSchema = new mongoose.Schema({
           },
         //   default : null
     },
-    // otpStatus: {type: Boolean, default: false },
 
     password: {
         type: String,
@@ -57,6 +56,10 @@ UserSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
+
+UserSchema.methods.getSignedToken = function () {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+}
 
 UserSchema.methods.matchPasswords = async function (password) {
     return await bcrypt.compare(password, this.password);
