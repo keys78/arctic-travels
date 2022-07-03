@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
         enum: ["user", "admin"]
     },
 
-    username: { type: String, required: [true, "Please provide a username"], trim: true },
+    username: { type: String, toUpperCase: true, required: [true, "Please provide a username"], trim: true },
 
     email: {
         type: String,
@@ -56,6 +56,11 @@ UserSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
+
+UserSchema.pre('save', async function (next) {
+    this.username.charAt(0).toUpperCase() + this.username.slice(1);
+    next();
+  });
 
 UserSchema.methods.getSignedToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: '1d' })

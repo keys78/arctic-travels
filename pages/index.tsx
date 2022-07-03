@@ -16,14 +16,6 @@ import { variants } from '../utils/data';
 
 const Home: NextPage = () => {
 
-//   const generateCode = () => {
-//     let id = ''
-//     id += String(Math.random()).slice(2, 8)
-//     return id
-// }
-
-// console.log(generateCode())
-
    return (
     <motion.main
       variants={variants}
