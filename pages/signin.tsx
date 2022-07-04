@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
+import axios from 'axios';
 
 const signin = () => {
   const router = useRouter()
@@ -20,12 +21,32 @@ const signin = () => {
       ...values,
       [name]: value,
     });
-    console.log(values)
+    // console.log(values)
   };
+  
 
   // useEffect(() => {
   //   console.log(values);
   // }, [values]); 
+  const registerUsers = async(value: any) => {
+    value.preventDefault()
+    const config:any = {
+      header: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+  }
+  try {
+      
+      const { data } = await axios.post("http://localhost:4000/auth/register", { ...values, }, config);
+      console.log(values, data)
+        alert(data.message)
+     
+
+  } catch (error) {
+      console.log(error)
+  }
+  }
 
 
   return (
@@ -46,7 +67,7 @@ const signin = () => {
             <span className='font-bold text-white'>Arctic Travels</span>
           </div>
         </div>
-        <form>
+        <form onSubmit={(e) => registerUsers(e)}>
           <Input name={'username'} value={values.username} label='username' type='text' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
           <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
           <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
