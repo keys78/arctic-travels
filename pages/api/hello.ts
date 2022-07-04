@@ -12,13 +12,3 @@ export default function handler(
 ) {
   res.status(200).json({ name: 'John Doe' })
 }
-
-export const getAllArticles = async (): Promise<IArticle[]> => {
-  // const params = { username, per_page: 1000 }
-  const headers = { 'Bearer': process.env.DEVTO_APIKEY }
-  const { data }: AxiosResponse = await axios.get(`http://localhost:4000/auth/register`, {
-      // params,
-      headers,
-  })
-  console.log(data)
-}
