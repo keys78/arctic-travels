@@ -89,7 +89,7 @@ const signin = () => {
 
       <div className='auth-page-wrapper'>
         <div className={`containerr ${activePanel ? 'right-panel-active' : ''} `} >
-          <div className="form-containerr sign-up-containerr">
+          {/* <div className="form-containerr sign-up-containerr">
             <form onSubmit={(e) => registerUsers(e)}>
             <h1>Create Account</h1>
               <Input name={'username'} value={values.username} label='username' type='text' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
@@ -99,9 +99,8 @@ const signin = () => {
               <button className='btn-class-form new-btn'>Sign In</button>
               <span className='ready-span'>Already have an account?  <span onClick={() => setActivePanel(!activePanel)}>Login</span></span>
             </form>
-          </div>
-          <div className="form-containerr sign-in-containerr">
-           
+          </div> */}
+          {/* <div className="form-containerr sign-in-containerr">
             <form>
             <h1>Log In</h1>
               <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
@@ -109,7 +108,7 @@ const signin = () => {
               <button className='btn-class-form new-btn'>Login In</button>
               <span className='ready-span'>Don't have an account?  <span onClick={() => setActivePanel(!activePanel)}>Sign Up</span></span>
             </form>
-          </div>
+          </div> */}
           <div className="overlay-containerr">
             <div className="overlay">
               <div className="overlay-panel overlay-left">
