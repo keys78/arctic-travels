@@ -23,8 +23,9 @@ const UserSchema = new mongoose.Schema({
     },
 
     verified: { type: Boolean, default: false },
-    otpStatus: {type: String, default: 'inactive'},
-    otpStatus: {type: Boolean, default: false },
+    otpStatus: {type: String, default: 'active'},
+    otpActiveSession: {type: Boolean, default: false },
+    otpCode: { type: Number },
 
     password: {
         type: String,
