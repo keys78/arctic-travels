@@ -8,6 +8,7 @@ import axios from 'axios';
 
 const signin = () => {
   const router = useRouter()
+  const [activePanel, setActivePanel] = useState(true)
   const initialValues = {
     username: "",
     email: "",
@@ -23,34 +24,39 @@ const signin = () => {
     });
     // console.log(values)
   };
-  
+
+
+
 
   // useEffect(() => {
   //   console.log(values);
   // }, [values]); 
-  const registerUsers = async(value: any) => {
+  const registerUsers = async (value: any) => {
     value.preventDefault()
-    const config:any = {
+    const config: any = {
       header: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-  }
-  try {
-      
+    }
+    try {
+
       const { data } = await axios.post("http://localhost:4000/auth/register", { ...values, }, config);
       console.log(values, data)
-        alert(data.message)
-     
+      alert(data.message)
 
-  } catch (error) {
+
+    } catch (error) {
       console.log(error)
-  }
+    }
   }
 
 
   return (
-    <motion.div
+    <>
+
+
+      {/* <motion.div
       variants={variants} 
       initial="hidden" 
       animate="enter" 
@@ -77,7 +83,57 @@ const signin = () => {
           <span className='ready-span'>Already have an account? <Link href={'/login'}><a><span>Login</span></a></Link></span>
         </form>
       </div>
-    </motion.div>
+    </motion.div> */}
+
+
+
+      <div className='auth-page-wrapper'>
+        <div className={`containerr ${activePanel ? 'right-panel-active' : ''} `} >
+          <div className="form-containerr sign-up-containerr">
+            <form onSubmit={(e) => registerUsers(e)}>
+            <h1>Create Account</h1>
+              <Input name={'username'} value={values.username} label='username' type='text' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
+              <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
+              <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
+              <Input name={'confirmPassword'} value={values.confirmPassword} label='confirm password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
+              <button className='btn-class-form new-btn'>Sign In</button>
+              <span className='ready-span'>Already have an account?  <span onClick={() => setActivePanel(!activePanel)}>Login</span></span>
+            </form>
+          </div>
+          <div className="form-containerr sign-in-containerr">
+           
+            <form>
+            <h1>Log In</h1>
+              <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
+              <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
+              <button className='btn-class-form new-btn'>Login In</button>
+              <span className='ready-span'>Don't have an account?  <span onClick={() => setActivePanel(!activePanel)}>Sign Up</span></span>
+            </form>
+          </div>
+          <div className="overlay-containerr">
+            <div className="overlay">
+              <div className="overlay-panel overlay-left">
+                <h1>Hi Champ!</h1>
+                <p>We've missed you. <br /> Log in let see what's up.</p>
+                <button onClick={() => setActivePanel(!activePanel)}>Log In</button>
+              </div>
+              <div className="overlay-panel overlay-right">
+                <h1>Hi Champ!</h1>
+                <p>Its misty and cool out there,<br /> why not sign up lets take you on a ride 😉</p>
+                <button onClick={() => setActivePanel(!activePanel)}>Sign Up</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+    </>
   )
 }
 
