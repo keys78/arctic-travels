@@ -3,6 +3,8 @@ const User = require('../models/user');
 const ErrorResponse = require('../utils/errorResponse')
 const sendEmail = require('../utils/sendEmail')
 const Token = require('../models/token')
+const OTP = require('../models/otp');
+const generateCode = require("../utils/otpGenerator");
 
 
 
@@ -10,6 +12,13 @@ const Token = require('../models/token')
 exports.register = async (userDetails, role, res, next) => {
 
     try {
+        const { email } = userDetails;
+
+        const isUserRegistered = await User.findOne({ email })
+        if (isUserRegistered) {
+            return next(new ErrorResponse('account already exist, try login', 401))
+        }
+
         const user = await User.create({
             ...userDetails, role
         });
@@ -21,13 +30,15 @@ exports.register = async (userDetails, role, res, next) => {
 
         const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-        sendEmail({
-            to: user.email,
-            subject: "Email verification",
-            text: url
-        });
+        // sendEmail({
+        //     to: user.email,
+        //     subject: "Email verification",
+        //     text: url
+        // });
 
-        res.json({ success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201 })
+        res.json({
+            success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201
+        })
 
 
     } catch (error) {
@@ -65,22 +76,39 @@ exports.login = async (req, res, next) => {
 
             const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-            sendEmail({
-                to: user.email,
-                subject: "Email verification",
-                text: url
-            });
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "Email verification",
+            //     text: url
+            // });
 
-            res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
+            return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
+
         }
 
-        // if(user.otpStatus !== "active") {
-        //     res.json({ otp: `1234`, status: 201 })
+        if (user.two_fa_status === 'on') {
 
-        // }
+            const otp = await new OTP ({
+                userId: user._id,
+                otp: generateCode()
+            }).save();
 
-        res.json({ success: true, message: `login success`, status: 201 })
+            user.OTP_code = otp.otp
+            await user.save();
 
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "One Time Password",
+            //     text: otp.otp
+            // });
+
+            await otp.remove();
+
+            return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
+        }
+
+        // return res.json({ success: true, message: `login success`, status: 201 })
+        sendToken(user, 200, res);
 
     } catch (error) {
         next(error)
@@ -88,8 +116,9 @@ exports.login = async (req, res, next) => {
 };
 
 
+
 exports.verifyEmail = async (req, res, next) => {
-    const user = User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
 
     try {
         if (!user) return res.status(400).send({ message: "Invalid link" });
@@ -98,7 +127,7 @@ exports.verifyEmail = async (req, res, next) => {
             userId: user._id,
             token: req.params.token,
         });
-        if (!token) return res.status(400).send({ message: "Invalid link" });
+        if (!token) return res.status(400).send({ message: "Invalid linky" });
 
         user.verified = true
         await user.save();
@@ -113,33 +142,54 @@ exports.verifyEmail = async (req, res, next) => {
     }
 };
 
-
 exports.verifyOTP = async (req, res, next) => {
-    const user = User.findById(req.params.id);
-    const { otpCode } = req.body;
-    const generatedOTP = 1234
+    const user = await User.findById(req.params.id);
+    const { otp } = req.body
 
     try {
-        if (!user) return res.status(400).send({ message: "bad request, try again" });
+        if (!user) return res.status(400).send({ message: "invalid user" });
 
-        // const token = await Token.findOne({
-        //     userId: user._id,
-        //     token: req.params.token,
-        // });
-        // if (!token) return res.status(400).send({ message: "Invalid link" });
-        if(otpCode === generatedOTP) {
-            user.otpActiveSession = true
-            
+        if(otp !== user.OTP_code) {
+            return next(new ErrorResponse('invalid token, please try again', 400))
         }
+        
+        user.OTP_code = null
         await user.save();
-       
-        // await token.remove();
-
-        res.json({ success: true, message: `Token Verified Successfully`, status: 202 })
-
+        // return res.json({ success: true, message: `login success`, status: 201 })
+        sendToken(user, 200, res);
 
     } catch (error) {
-        return next(new ErrorResponse('Internal Server Error', 500))
+        return next(new ErrorResponse('Internal Server', 500))
 
     }
 };
+
+
+
+const sendToken = (user, statusCode, res) => {
+    const token = user.getSignedToken();
+    res.status(statusCode).json({ success: true, data: user.username, token })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// exports.verifyEmail =  async (req, res) => {
+// 	try {
+// 		const user = await User.findOne({ _id: req.params.id });
+// 		if (!user) return res.status(400).send({ message: "Invalid link" });
+// 		const token = await Token.findOne({	userId: user._id,token: req.params.token,	});
+// 		if (!token) return res.status(400).send({ message: "Invalid link" });
+// 		await User.updateOne({ _id: user._id, verified: true });
+// 		await token.remove();
+// 		res.status(200).send({ message: "Email verified successfully" });
+// 	} catch (error) {res.status(500).send({ message: "Internal Server Error" });}}
