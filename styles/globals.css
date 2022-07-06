@@ -502,17 +502,20 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.panel-dropdown { border:1px solid #000; padding: 12px 0px; border-radius: 8px; }
+.panel-dropdown { border:1px solid #000; background: #fff; padding: 16px 0px; border-radius: 8px; position: absolute; right: 60px;}
 .panel-dropdown div:nth-of-type(1) { }
-.panel-dropdown .verify-2fa-group  { font-family: 'Lobster', cursive; font-size: 18px; border-bottom: 1px solid rgb(2, 3, 36); padding: 0 12px 6px 12px;}
+.panel-dropdown .verify-2fa-group  { font-family: 'Lobster', cursive; font-size: 18px; border-bottom: 1px solid rgb(2, 3, 36); padding: 0 20px 6px 20px;}
 .verify-2fa-group .switch-toggle { display: flex; align-items: center; justify-content: space-between; }
 
-.logout {margin: 10px auto 0 auto; background:#24243e; transition: 0.4s; display: flex; align-items: center; justify-content: center; padding: 4px 12px; max-width: 130px; border-radius: 4px; color:#fff; column-gap: 8px; cursor: pointer;  font-family: 'Lobster', cursive; font-size: 18px;}
+.logout {margin: 16px auto 6px auto; background:#24243e; transition: 0.4s; display: flex; align-items: center; justify-content: center; padding: 4px 12px; max-width: 130px; border-radius: 4px; color:#fff; column-gap: 8px; cursor: pointer;  font-family: 'Lobster', cursive; font-size: 18px;}
 .logout:hover { background: #000; transition: 0.4s;}
+.data-spec { text-align: center; margin-top: 20px; font-size: 18px; line-height: 30px;}
 
 
-
-
+.password-confirm-modal {position: fixed; top: 0; left: 0; height: 100vh; width: 100%; background: #000000a3; display: flex; align-items: center; justify-content: center;}
+.password-confirm-modal > form {position: relative; background-color: #fff; padding: 30px 12px 20px 12px; margin: -340px 0 12px 12px; border-radius: 6px; max-width: 350px; width: 100%; height: auto !important; display: block !important;}
+.password-confirm-modal form  .input-data .underline {left: -162px !important;}
+.password-confirm-modal form .close-modal-p  {position: absolute; top: 5px; right: 5px;}
 
 
 
