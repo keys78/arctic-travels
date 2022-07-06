@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { User, GlobeStand, SignOut } from 'phosphor-react'
 import Input from '../../components/Input'
-import OTPField from '../../components/OTP_popup'
+
+
 
 const Dashboard = () => {
   const [showDrop, setShowDrop] = useState(false)
@@ -64,7 +65,6 @@ const Dashboard = () => {
   return (
     <>
       <div className='dash-area'>
-        <OTPField />
         <div className="circle-wrapper">
           <div className="success circle"></div>
           <div className="icon">
