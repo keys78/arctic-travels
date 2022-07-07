@@ -96,11 +96,11 @@ exports.login = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            // sendEmail({
-            //     to: user.email,
-            //     subject: "One Time Password",
-            //     text: otp.otp
-            // });
+            sendEmail({
+                to: user.email,
+                subject: "One Time Password",
+                text: otp.otp
+            });
 
             await otp.remove();
 

@@ -22,7 +22,7 @@ const signin = () => {
       ...values,
       [name]: value,
     });
-    // console.log(values)
+
   };
 
 
