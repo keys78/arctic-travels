@@ -1,14 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import Input from '../components/Input'
 import Link from 'next/link'
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux'
+import { register, reset } from '../features/auth/authSlice';
+
+
+interface loaderProps {
+  src: string,
+  width: number,
+  height: number,
+  quality: string
+}
 
 const signin = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const [activePanel, setActivePanel] = useState(true)
+  const { user: welcomeMessage, isLoading, isError, isSuccess, message } = useSelector(
+    (state:any) => state.auth
+  )
+
+  
   const initialValues = {
     username: "",
     email: "",
@@ -25,6 +42,18 @@ const signin = () => {
 
   };
 
+  
+  useEffect(() => {
+    if (isError) {
+      alert(message)
+    }
+
+    if (isSuccess || welcomeMessage) {
+      alert(welcomeMessage)
+    }
+
+    dispatch(reset())
+  }, [welcomeMessage, isError, isSuccess, message, router, dispatch])
 
 
 
@@ -33,22 +62,46 @@ const signin = () => {
   // }, [values]); 
   const registerUsers = async (value: any) => {
     value.preventDefault()
-    const config: any = {
-      header: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
+    // const config: any = {
+    //   header: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    // }
+    // try {
+    //   const { data } = await axios.post("http://localhost:4000/auth/register", { ...values, }, config);
+    //   console.log(values, data)
+    //   alert(data.message)
+    // } catch (error) {
+    //   console.log(error)
+    // }
+
+    if (values.password !== values.confirmPassword) {
+      alert('Passwords do not match')
+    } else {
+      const userData = { ...values, }
+
+      dispatch(register(userData))
     }
-    try {
+  }
 
-      const { data } = await axios.post("http://localhost:4000/auth/register", { ...values, }, config);
-      console.log(values, data)
-      alert(data.message)
-
-
-    } catch (error) {
-      console.log(error)
-    }
+  if (isLoading) {
+    return "loading"
+  }
+  
+  // const myLoader = ({ src, width, quality }: loaderProps ) => {
+  //   return `https://example.com/${src}?w=${width}&q=${quality || 75}`
+  // }
+  
+  const loader = () => {
+    return (
+      <Image
+        src="/plano_loader.gif"
+        alt="Picture of the author"
+        width={500}
+        height={500}
+      />
+    )
   }
 
 
@@ -96,7 +149,7 @@ const signin = () => {
               <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'confirmPassword'} value={values.confirmPassword} label='confirm password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-              <button className='btn-class-form new-btn'>Sign In</button>
+              <button className='btn-class-form new-btn'>Sign In <span>{loader()}</span></button>
               <span className='ready-span'>Already have an account?  <span onClick={() => setActivePanel(!activePanel)}>Login</span></span>
             </form>
           </div>
