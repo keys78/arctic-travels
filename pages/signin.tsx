@@ -1,31 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import Input from '../components/Input'
-import Link from 'next/link'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
-import { register, reset } from '../features/auth/authSlice';
+import { register, login, reset } from '../features/auth/authSlice';
 
 
-interface loaderProps {
-  src: string,
-  width: number,
-  height: number,
-  quality: string
-}
 
 const signin = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [activePanel, setActivePanel] = useState(true)
-  const { user: welcomeMessage, isLoading, isError, isSuccess, message } = useSelector(
-    (state:any) => state.auth
-  )
+  const { user, isLoading, isError, isSuccess, message } = useSelector( (state: any) => state.auth )
+  console.log(user)
 
-  
+
   const initialValues = {
     username: "",
     email: "",
@@ -42,39 +33,22 @@ const signin = () => {
 
   };
 
-  
+
   useEffect(() => {
     if (isError) {
       alert(message)
     }
 
-    if (isSuccess || welcomeMessage) {
-      alert(welcomeMessage)
+    if (isSuccess || user) {
+      router.push('/dashboard')
     }
 
     dispatch(reset())
-  }, [welcomeMessage, isError, isSuccess, message, router, dispatch])
+  }, [user, isError, isSuccess, message, router, dispatch])
 
 
-
-  // useEffect(() => {
-  //   console.log(values);
-  // }, [values]); 
   const registerUsers = async (value: any) => {
     value.preventDefault()
-    // const config: any = {
-    //   header: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    // }
-    // try {
-    //   const { data } = await axios.post("http://localhost:4000/auth/register", { ...values, }, config);
-    //   console.log(values, data)
-    //   alert(data.message)
-    // } catch (error) {
-    //   console.log(error)
-    // }
 
     if (values.password !== values.confirmPassword) {
       alert('Passwords do not match')
@@ -85,18 +59,25 @@ const signin = () => {
     }
   }
 
-  if (isLoading) {
-    return "loading"
+  const loginUsers = async (value: any) => {
+    value.preventDefault();
+
+    const userData = { ...values, }
+    dispatch(login(userData))
+
+    // if(isSuccess || user) {
+      router.push('/dashboard')
+      // console.log(user)
+    // }
   }
-  
-  // const myLoader = ({ src, width, quality }: loaderProps ) => {
-  //   return `https://example.com/${src}?w=${width}&q=${quality || 75}`
-  // }
-  
+
+
+
+
   const loader = () => {
     return (
       <Image
-        src="/plano_loader.gif"
+        src="/loading.gif"
         alt="Picture of the author"
         width={500}
         height={500}
@@ -107,55 +88,28 @@ const signin = () => {
 
   return (
     <>
-
-
-      {/* <motion.div
-      variants={variants} 
-      initial="hidden" 
-      animate="enter" 
-      exit="exit"
-      transition={{ type: 'linear' }} 
-      className='form-group-wrapper'>
-      <div className='form-group'>
-        <div className='form-logo'>
-          <div onClick={() => router.push('/')} className="logo-wrapper cursor-default flex items-center justify-center space-x-3">
-            <div className='el-wrap'>
-              <img className='el-logo' src="/images/dotted_circle.png" height={'40px'} width={'40px'} />
-              <img className='el-plane' src="/images/angular_plane.png" height={'40px'} width={'40px'} />
-            </div>
-            <span className='font-bold text-white'>Arctic Travels</span>
-          </div>
-        </div>
-        <form onSubmit={(e) => registerUsers(e)}>
-          <Input name={'username'} value={values.username} label='username' type='text' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-          <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-          <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-          <Input name={'confirmPassword'} value={values.confirmPassword} label='confirm password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-
-          <button className='btn-class-form'>Sign In</button>
-          <span className='ready-span'>Already have an account? <Link href={'/login'}><a><span>Login</span></a></Link></span>
-        </form>
-      </div>
-    </motion.div> */}
-
-
-
-      <div className='auth-page-wrapper'>
-        <div className={`containerr ${activePanel ? 'right-panel-active' : ''} `} >
+      <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="enter"
+        exit="exit"
+        transition={{ type: 'linear' }}
+        className='auth-page-wrapper'>
+        <div className={`containerr ${!activePanel ? 'right-panel-active' : ''} `} >
           <div className="form-containerr sign-up-containerr">
             <form onSubmit={(e) => registerUsers(e)}>
-            <h1>Create Account</h1>
+              <h1>Create Account</h1>
               <Input name={'username'} value={values.username} label='username' type='text' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'confirmPassword'} value={values.confirmPassword} label='confirm password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-              <button className='btn-class-form new-btn'>Sign In <span>{loader()}</span></button>
+              <button className='btn-class-form new-btn'> <span>Sign In</span> <span>{isLoading && loader()}</span></button>
               <span className='ready-span'>Already have an account?  <span onClick={() => setActivePanel(!activePanel)}>Login</span></span>
             </form>
           </div>
           <div className="form-containerr sign-in-containerr">
-            <form>
-            <h1>Log In</h1>
+            <form onSubmit={(e) => loginUsers(e)}>
+              <h1>Log In</h1>
               <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <button className='btn-class-form new-btn'>Login In</button>
@@ -177,13 +131,7 @@ const signin = () => {
             </div>
           </div>
         </div>
-      </div>
-
-
-
-
-
-
+      </motion.div>
 
     </>
   )

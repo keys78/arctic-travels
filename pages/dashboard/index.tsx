@@ -1,14 +1,53 @@
 import React, { useState, useEffect } from 'react'
 import { User, GlobeStand, SignOut } from 'phosphor-react'
 import Input from '../../components/Input'
+import {activate2FA, reset } from '../../features/auth/authSlice'
+import { getUser } from '../../features/private/privateSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
 
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
   const [showDrop, setShowDrop] = useState(false)
-  const [showConfirmPasswordModal, setShowConfirmPasswordModal] = useState(false)
+  const [showConfirmPasswordModal, setShowConfirmPasswordModal] = useState(true)
   const [is2FA, setIs2FA] = useState(false)
   const [greetings, setGreetings] = useState('')
+
+  // const { user, isLoading, isError, isSuccess, message } = useSelector( (state: any) => state.auth )
+  const { user } = useSelector((state: any) => state.auth)
+  const { user: userData, isLoading, isError, message } = useSelector(
+    (state: any) => state.private
+  )
+
+  console.log(userData)
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message)
+    }
+
+    if (!user) {
+      router.push('/signin')
+    }
+
+    dispatch(getUser())
+
+    // return () => {
+    //   dispatch(reset())
+    // }
+  }, [user, router, isError, message, dispatch])
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("authToken")) {
+  //     history.push("/dashboard");
+  //   }
+  // }, [history]);
+
+
+
 
   const initialValues = {
     password: "",
@@ -39,7 +78,10 @@ const Dashboard = () => {
 
 
   const handleToggleIs2FA = () => {
-    setShowConfirmPasswordModal(value => !showConfirmPasswordModal)
+    // setShowConfirmPasswordModal(value => !showConfirmPasswordModal)
+    // const userData = { ...values, }
+    dispatch(activate2FA(userData._id))
+
   }
 
   const confirmPasswordFor2FA = (e: any) => {
@@ -97,9 +139,10 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='data-spec'>
-        <h1>{greetings} Emmanuel</h1>
+        <h1>{greetings} {userData.username}</h1>
+        {/* <h1>{greetings} {'Emmanuel'}</h1> */}
         <p>Your 2FA Authentication is {is2FA ? "active" : "inactive"}</p>
-        {showConfirmPasswordModal && renderPasswordConfirmModal}
+        {/* {showConfirmPasswordModal && renderPasswordConfirmModal} */}
       </div>
     </>
   )
