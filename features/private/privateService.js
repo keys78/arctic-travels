@@ -7,12 +7,11 @@ const PRIVATE_API_URL = 'http://localhost:4000/private/'
 const getUser = async (token) => {
   const config = {
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   }
-
   const {data} = await axios.get(PRIVATE_API_URL + 'user', config)
-
   return data
 }
 
@@ -20,10 +19,12 @@ const getUser = async (token) => {
 const activate2FA = async (id, token) => {
   const config = {
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      
     },
   }
-  const {data} = await axios.post(`${PRIVATE_API_URL + `activate2FA/${id}`}`, config)
+  const {data} = await axios.post(`${PRIVATE_API_URL + `activate2FA/${id}`}`, {}, config)
 
   console.log(data)
   return data

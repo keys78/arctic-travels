@@ -8,6 +8,8 @@ const initialState = {
   isLoading: false,
   message: '',
 }
+// const token = JSON.parse(localStorage.getItem('authToken'))
+const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
 
 
 // Get user user
@@ -15,7 +17,7 @@ export const getUser = createAsyncThunk(
   'private/user',
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token
+      // const token = thunkAPI.getState().auth.user.toke
       return await privateService.getUser(token)
     } catch (error) {
       const message =
@@ -34,7 +36,6 @@ export const activate2FA = createAsyncThunk(
   'auth/activate2FA',
   async (id, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token
       return await privateService.activate2FA(id, token)
     } catch (error) {
       const message =
@@ -54,7 +55,7 @@ export const privateSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    resetUser: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -74,5 +75,5 @@ export const privateSlice = createSlice({
   },
 })
 
-export const { reset } = privateSlice.actions
+export const { resetUser } = privateSlice.actions
 export default privateSlice.reducer

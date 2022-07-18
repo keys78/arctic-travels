@@ -4,7 +4,7 @@ import authService from './authService'
 
 
 // Perform localStorage action
-const user = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user'))
+const user = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
 
 const initialState = {
   user: user ? user : null,
@@ -97,9 +97,9 @@ export const authSlice = createSlice({
         state.message = action.payload
         state.user = null
       })
-      // .addCase(logout.fulfilled, (state) => {
-      //   state.user = null
-      // })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null
+      })
   },
 })
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { User, GlobeStand, SignOut } from 'phosphor-react'
 import Input from '../../components/Input'
-import {activate2FA, reset } from '../../features/auth/authSlice'
-import { getUser } from '../../features/private/privateSlice'
+import { logout, reset } from '../../features/auth/authSlice'
+import { getUser, activate2FA, resetUser } from '../../features/private/privateSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
@@ -22,7 +22,13 @@ const Dashboard = () => {
     (state: any) => state.private
   )
 
-  console.log(userData)
+  const onLogout = () => {
+    dispatch(logout())
+    dispatch(reset())
+    router.push('/signin')
+  }
+
+  console.log(user)
 
   useEffect(() => {
     if (isError) {
@@ -35,10 +41,11 @@ const Dashboard = () => {
 
     dispatch(getUser())
 
-    // return () => {
-    //   dispatch(reset())
-    // }
-  }, [user, router, isError, message, dispatch])
+    return () => {
+     dispatch(resetUser())
+    };
+
+  }, [router, isError, message, dispatch])
 
   // useEffect(() => {
   //   if (localStorage.getItem("authToken")) {
@@ -86,9 +93,9 @@ const Dashboard = () => {
 
   const confirmPasswordFor2FA = (e: any) => {
     e.preventDefault()
-    if(value.password === "111") {
+    if (value.password === "111") {
       setIs2FA(value => !is2FA)
-      setShowConfirmPasswordModal(prev  => !showConfirmPasswordModal)
+      setShowConfirmPasswordModal(prev => !showConfirmPasswordModal)
     } else {
       alert('incorrect password')
     }
@@ -97,7 +104,7 @@ const Dashboard = () => {
   const renderPasswordConfirmModal = [
     <div className='password-confirm-modal'>
       <form onSubmit={(e) => confirmPasswordFor2FA(e)}>
-        <span className='close-modal-p' onClick={() => setShowConfirmPasswordModal(prev  => !showConfirmPasswordModal)}>close</span>
+        <span className='close-modal-p' onClick={() => setShowConfirmPasswordModal(prev => !showConfirmPasswordModal)}>close</span>
         <Input name={'password'} value={value.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
         <button className='btn-class-form new-btn'>Confirm</button>
       </form>
@@ -126,20 +133,30 @@ const Dashboard = () => {
                       type="checkbox"
                       onChange={handleToggleIs2FA}
                       checked={is2FA && true}
-                      // placeholder="light"
+                    // placeholder="light"
                     />
                     <span className="slider round"></span>
                   </label>
                   <h6>On</h6>
                 </div>
               </div>
-              <div className='logout'> <SignOut size={20} color="#fff" weight="bold" /> Logout </div>
+              <div onClick={onLogout} className='logout'> <SignOut size={20} color="#fff" weight="bold" /> Logout </div>
             </div>
           }
         </div>
       </div>
       <div className='data-spec'>
         <h1>{greetings} {userData.username}</h1>
+        <p>{userData._id}</p>
+        {/* <div>
+          My Info
+          <div>
+            <p>{userData.username}</p>
+            <p>{userData.email}</p>
+            <p>email status: {userData.verified ? 'verified' : 'not verified'}</p>
+            <p>2FA status: {userData.two_fa_status}</p>
+            </div>
+        </div> */}
         {/* <h1>{greetings} {'Emmanuel'}</h1> */}
         <p>Your 2FA Authentication is {is2FA ? "active" : "inactive"}</p>
         {/* {showConfirmPasswordModal && renderPasswordConfirmModal} */}
