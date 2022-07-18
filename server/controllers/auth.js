@@ -86,26 +86,26 @@ exports.login = async (req, res, next) => {
 
         }
 
-        if (user.two_fa_status === 'on') {
+        // if (user.two_fa_status === 'on') {
 
-            const otp = await new OTP ({
-                userId: user._id,
-                otp: generateCode()
-            }).save();
+        //     const otp = await new OTP ({
+        //         userId: user._id,
+        //         otp: generateCode()
+        //     }).save();
 
-            user.OTP_code = otp.otp
-            await user.save();
+        //     user.OTP_code = otp.otp
+        //     await user.save();
 
-            sendEmail({
-                to: user.email,
-                subject: "One Time Password",
-                text: otp.otp
-            });
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "One Time Password",
+            //     text: otp.otp
+            // });
 
-            await otp.remove();
+        //     await otp.remove();
 
-            return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
-        }
+        //     return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
+        // }
 
         // return res.json({ success: true, message: `login success`, status: 201 })
         sendToken(user, 200, res);

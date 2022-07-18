@@ -222,13 +222,13 @@ body { font-family: var(--font); position: relative; color: var(--nearHellBlack)
 
 
 
-
 /* input form */
 .form-group-wrapper {  display: flex; align-items: center; justify-content: center; min-height: 100vh;}
 .form-group { max-width: 450px; margin: 0 10px;  width: 100%; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); border-radius: 8px; background: var(--white);}
 .form-logo { background: linear-gradient(to right, #141e30, #243b55); margin-bottom: 40px; padding: 14px 0; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center; }
 .form-logo .logo-wrapper { width: 100% !important;}
-.btn-class-form { background: var(--primaryBlue); color: var(--creamsonWhite); width: 100%; padding: 8px 0; font-size: 16px; border-radius: 7px; margin-bottom: 10px;}
+.btn-class-form { background: var(--primaryBlue); color: var(--creamsonWhite); width: 100%; height:43px; font-size: 16px; border-radius: 7px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; column-gap: 6px;}
+.btn-class-form > span:nth-of-type(2) { max-width:30px; display: block; margin-bottom: -5px;}
 .ready-span { font-size: 14px; font-weight: 400; float: right; margin-top: 12px;}
 .ready-span  span { color: var(--primaryBlue); text-decoration: underline; cursor: pointer;}
 .form-group > form { max-width: 400px;  padding:0 10px 50px 10px; margin: 0 auto;}
