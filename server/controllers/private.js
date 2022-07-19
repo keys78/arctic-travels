@@ -10,18 +10,15 @@ exports.getUser = async (req, res, next) => {
     const { id } = req.user
 
     try {
-         User.findOne({ _id: id }, { email: 1, username:1, verified:1 }).exec((error, user) => {
+         User.findOne({ _id: id }, { email: 1, username:1, verified:1, two_fa_status: 1, }).exec((error, user) => {
             if(error) { 
                 return next(new ErrorResponse('unable to fetch user', 404))
             }
-
             return res.status(200).json(user)
         })
     } catch (error) {
         next(error)
     }
-
-
 };
 
 
@@ -99,7 +96,8 @@ exports.activate2FA = async (req, res, next) => {
         user.two_fa_status = "on"
         await user.save();
 
-        return res.json({ data: '2FA activation was successful' });
+        return res.json( {status: user.two_fa_status, message: '2FA activation was successful'});
+        // return res.json({ data: '2FA activation was successful' });
     } catch (error) {
         next(error)
     }
@@ -123,7 +121,8 @@ exports.deactivate2FA = async (req, res, next) => {
         user.two_fa_status = "off"
         await user.save();
 
-        return res.json({ data: '2FA de-activation was successful' });
+        return res.json( {status: user.two_fa_status, message: '2FA de-activation was successful'} );
+        // return res.json({ data: '2FA de-activation was successful' });
     } catch (error) {
         next(error)
     }
