@@ -11,8 +11,16 @@ const initialState = {
 // const token = JSON.parse(localStorage.getItem('authToken'))
 const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
 
+function message(error) {
+error.response.data.error ||
+(error.response &&
+  error.response.data &&
+  error.response.data.message) ||
+error.message
+error.toString()
+}
 
-// Get user user
+// Get user 
 export const getUser = createAsyncThunk(
   'private/user',
   async (_, thunkAPI) => {
@@ -30,13 +38,33 @@ export const getUser = createAsyncThunk(
     }
   }
 )
+// Get all verified users
+export const getAllVerifiedUsers = createAsyncThunk(
+  '/admin/all-verified-users',
+  async (_, thunkAPI) => {
+    try {
+      // const token = thunkAPI.getState().auth.user.toke
+      return await privateService.getAllVerifiedUsers(token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
 // activate 2FA
 export const activate2FA = createAsyncThunk(
-  'auth/activate2FA',
-  async (id, thunkAPI) => {
-    try {
-      return await privateService.activate2FA(id, token)
+  'private/activate2FA',
+  async (obj, thunkAPI) => {
+    try { 
+      let password = { password: obj.password}
+      console.log(password)
+      return await privateService.activate2FA(obj.id, password, token)
     } catch (error) {
       const message =
         error.response.data.error ||
@@ -45,6 +73,20 @@ export const activate2FA = createAsyncThunk(
           error.response.data.message) ||
         error.message
       error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+// deactivate 2FA
+export const deActivate2FA = createAsyncThunk(
+  'private/deactivate2FA',
+  async (obj, thunkAPI) => {
+    try { 
+      let password = { password: obj.password}
+      console.log(password)
+      return await privateService.deActivate2FA(obj.id, password, token)
+    } catch (error) {
+      message(error)
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -68,6 +110,32 @@ export const privateSlice = createSlice({
         state.user = action.payload
       })
       .addCase(getUser.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(activate2FA.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(activate2FA.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.user.two_fa_status =  action.payload.status
+      })
+      .addCase(activate2FA.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(deActivate2FA.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(deActivate2FA.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.user.two_fa_status =  action.payload.status
+      })
+      .addCase(deActivate2FA.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

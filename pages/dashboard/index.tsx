@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { User, GlobeStand, SignOut } from 'phosphor-react'
 import Input from '../../components/Input'
 import { logout, reset } from '../../features/auth/authSlice'
-import { getUser, activate2FA, resetUser } from '../../features/private/privateSlice'
+import { getUser, activate2FA, deActivate2FA, resetUser } from '../../features/private/privateSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
@@ -12,11 +12,9 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [showDrop, setShowDrop] = useState(false)
-  const [showConfirmPasswordModal, setShowConfirmPasswordModal] = useState(true)
-  const [is2FA, setIs2FA] = useState(false)
+  const [showConfirmPasswordModal, setShowConfirmPasswordModal] = useState(false)
   const [greetings, setGreetings] = useState('')
 
-  // const { user, isLoading, isError, isSuccess, message } = useSelector( (state: any) => state.auth )
   const { user } = useSelector((state: any) => state.auth)
   const { user: userData, isLoading, isError, message } = useSelector(
     (state: any) => state.private
@@ -28,7 +26,7 @@ const Dashboard = () => {
     router.push('/signin')
   }
 
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     if (isError) {
@@ -45,7 +43,7 @@ const Dashboard = () => {
      dispatch(resetUser())
     };
 
-  }, [router, isError, message, dispatch])
+  }, [user, router, isError, message, dispatch])
 
   // useEffect(() => {
   //   if (localStorage.getItem("authToken")) {
@@ -85,20 +83,15 @@ const Dashboard = () => {
 
 
   const handleToggleIs2FA = () => {
-    // setShowConfirmPasswordModal(value => !showConfirmPasswordModal)
-    // const userData = { ...values, }
-    dispatch(activate2FA(userData._id))
-
+    setShowConfirmPasswordModal(val => !showConfirmPasswordModal)
   }
 
   const confirmPasswordFor2FA = (e: any) => {
     e.preventDefault()
-    if (value.password === "111") {
-      setIs2FA(value => !is2FA)
-      setShowConfirmPasswordModal(prev => !showConfirmPasswordModal)
-    } else {
-      alert('incorrect password')
-    }
+    {userData.two_fa_status === "off" && dispatch(activate2FA({id:userData._id, password:value.password}))}
+    {userData.two_fa_status === "on" && dispatch(deActivate2FA({id:userData._id, password:value.password}))}
+
+    setShowConfirmPasswordModal(val => !showConfirmPasswordModal)
   }
 
   const renderPasswordConfirmModal = [
@@ -132,8 +125,7 @@ const Dashboard = () => {
                     <input
                       type="checkbox"
                       onChange={handleToggleIs2FA}
-                      checked={is2FA && true}
-                    // placeholder="light"
+                      checked={userData.two_fa_status === "on" && true}
                     />
                     <span className="slider round"></span>
                   </label>
@@ -158,8 +150,8 @@ const Dashboard = () => {
             </div>
         </div> */}
         {/* <h1>{greetings} {'Emmanuel'}</h1> */}
-        <p>Your 2FA Authentication is {is2FA ? "active" : "inactive"}</p>
-        {/* {showConfirmPasswordModal && renderPasswordConfirmModal} */}
+        <p>Your 2FA Authentication is {userData.two_fa_status === "on" ? "active" : "inactive"}</p>
+        {showConfirmPasswordModal && renderPasswordConfirmModal}
       </div>
     </>
   )
