@@ -10,7 +10,7 @@ exports.getUser = async (req, res, next) => {
     const { id } = req.user
 
     try {
-         User.findOne({ _id: id }, { email: 1, username:1, verified:1, two_fa_status: 1, }).exec((error, user) => {
+         User.findOne({ _id: id }, {role:1, email: 1, username:1, verified:1, two_fa_status: 1, }).exec((error, user) => {
             if(error) { 
                 return next(new ErrorResponse('unable to fetch user', 404))
             }
@@ -22,30 +22,22 @@ exports.getUser = async (req, res, next) => {
 };
 
 
-exports.getAllUnverifiedUsers= (req, res, next) => {
-
+exports.getAllUnverifiedUsers = async (req, res, next) => {
     try {
-        User.find({ verified: false, role: 'user', OTP_code:0 }, function (error, users) {
-            if (error) {
-                return next(new ErrorResponse('unable to fetch unverified users', 404))
-            }
-            res.json(users)
-
-        })
-    } catch (error) {
-        next(error)
-    }
+        await User.find({ verified: false, role: 'user', }).then((users) => {
+             res.send(users);
+             });
+     } catch (error) {
+         next(error)
+     }
 };
 
-exports.getAllVerifiedUsers= (req, res, next) => {
-    try {
-        User.find({ verified: true, role: 'user', OTP_code:0 }, function (error, users) {
-            if (error) {
-                return next(new ErrorResponse('unable to fetch verified users', 404))
-            }
-            res.json(users)
 
-        })
+exports.getAllVerifiedUsers = async (req, res, next) => {
+    try {
+       await User.find({ verified: true, role: 'user', }).then((users) => {
+            res.send(users);
+            });
     } catch (error) {
         next(error)
     }
@@ -68,7 +60,7 @@ exports.deleteUser = async (req, res, next) => {
             await token.remove();
         }
 
-        res.json({ success: true, message: 'account has been deleted' })
+        res.json({id: user._id, success: true, message: 'account has been deleted' })
 
     } catch (error) {
         next(error)

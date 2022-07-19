@@ -3,6 +3,7 @@ import { User, GlobeStand, SignOut } from 'phosphor-react'
 import Input from '../../components/Input'
 import { logout, reset } from '../../features/auth/authSlice'
 import { getUser, activate2FA, deActivate2FA, resetUser } from '../../features/private/privateSlice'
+import { getAllUnVerifiedUsers, getAllVerifiedUsers, deleteUser } from '../../features/admin/adminSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
@@ -16,9 +17,18 @@ const Dashboard = () => {
   const [greetings, setGreetings] = useState('')
 
   const { user } = useSelector((state: any) => state.auth)
-  const { user: userData, isLoading, isError, message } = useSelector(
-    (state: any) => state.private
-  )
+  const { user: userData, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
+  const { verifiedUsers, unVerifiedUsers, isSuccess: issuccess, isError: iserror } = useSelector((state: any) => state.admin)
+  console.log(verifiedUsers, unVerifiedUsers)
+  const initialValues = { password: "", };
+  const [value, setValue] = useState(initialValues);
+  const onHandleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setValue({
+      ...value,
+      [name]: value,
+    })
+  };
 
   const onLogout = () => {
     dispatch(logout())
@@ -26,12 +36,13 @@ const Dashboard = () => {
     router.push('/signin')
   }
 
-  // console.log(user)
+
 
   useEffect(() => {
-    if (isError) {
-      console.log(message)
-    }
+    // if (isError) {
+    //   alert(message)
+    // }
+    console.log(!isError && message)
 
     if (!user) {
       router.push('/signin')
@@ -39,34 +50,18 @@ const Dashboard = () => {
 
     dispatch(getUser())
 
+    // if (userData.role === "admin") {
+    dispatch(getAllVerifiedUsers())
+    dispatch(getAllUnVerifiedUsers())
+    // }
+
     return () => {
-     dispatch(resetUser())
+      dispatch(resetUser())
     };
 
-  }, [user, router, isError, message, dispatch])
-
-  // useEffect(() => {
-  //   if (localStorage.getItem("authToken")) {
-  //     history.push("/dashboard");
-  //   }
-  // }, [history]);
+  }, [user, router, iserror, issuccess, message, dispatch])
 
 
-
-
-  const initialValues = {
-    password: "",
-  };
-
-  const [value, setValue] = useState(initialValues);
-  const onHandleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setValue({
-      ...value,
-      [name]: value,
-    });
-    // console.log(value)
-  };
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -88,10 +83,14 @@ const Dashboard = () => {
 
   const confirmPasswordFor2FA = (e: any) => {
     e.preventDefault()
-    {userData.two_fa_status === "off" && dispatch(activate2FA({id:userData._id, password:value.password}))}
-    {userData.two_fa_status === "on" && dispatch(deActivate2FA({id:userData._id, password:value.password}))}
+    const thunkData = { id: userData._id, password: value.password }
+
+    { userData.two_fa_status === "off" && dispatch(activate2FA(thunkData)) }
+    { userData.two_fa_status === "on" && dispatch(deActivate2FA(thunkData)) }
+
 
     setShowConfirmPasswordModal(val => !showConfirmPasswordModal)
+
   }
 
   const renderPasswordConfirmModal = [
@@ -138,7 +137,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='data-spec'>
-        <h1>{greetings} {userData.username}</h1>
+        <h1>{greetings} {userData.username} {userData.role}</h1>
         <p>{userData._id}</p>
         {/* <div>
           My Info
@@ -152,6 +151,21 @@ const Dashboard = () => {
         {/* <h1>{greetings} {'Emmanuel'}</h1> */}
         <p>Your 2FA Authentication is {userData.two_fa_status === "on" ? "active" : "inactive"}</p>
         {showConfirmPasswordModal && renderPasswordConfirmModal}
+
+        {userData.role === "admin" &&
+          <div>
+            {unVerifiedUsers ? unVerifiedUsers.map((val: any) => (
+              <div key={userData._id}>
+                <p>{val.username}</p>
+                <p>{val.email}</p>
+                <button onClick={() => dispatch(deleteUser(val._id))} className='close'>
+                  X
+                </button>
+              </div>
+            )) : 'loading...'
+            }
+          </div>
+        }
       </div>
     </>
   )
