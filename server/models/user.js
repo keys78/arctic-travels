@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     },
 
     verified: { type: Boolean, default: false },
-    two_fa_status: {type: String, default: 'on'},
+    two_fa_status: {type: String, default: 'off'},
     OTP_code: { type: String, 
         index: {
             unique: true,

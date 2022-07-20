@@ -9,15 +9,19 @@ const initialState = {
   message: '',
 }
 
-const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
+// const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
 
+// function myToken(thunkAPI) {
+//   const token = thunkAPI.getState().auth.user.token
+//   return token
+// }
 
 // Get user 
 export const getUser = createAsyncThunk(
   'private/user',
   async (_, thunkAPI) => {
     try {
-      // const token = thunkAPI.getState().auth.user.toke
+      const token = thunkAPI.getState().auth.user.token 
       return await privateService.getUser(token)
     } catch (error) {
       const message =
@@ -38,7 +42,8 @@ export const activate2FA = createAsyncThunk(
   async (obj, thunkAPI) => {
     try {
       let password = { password: obj.password }
-      return await privateService.activate2FA(obj.id, password, token)
+      const token = thunkAPI.getState().auth.user.token
+      return await privateService.activate2FA(obj.id, password,token)
     } catch (error) {
       const message =
         error.response.data.error ||
@@ -57,6 +62,7 @@ export const deActivate2FA = createAsyncThunk(
   async (obj, thunkAPI) => {
     try {
       let password = { password: obj.password }
+      const token = thunkAPI.getState().auth.user.token
       return await privateService.deActivate2FA(obj.id, password, token)
     } catch (error) {
       const message =
