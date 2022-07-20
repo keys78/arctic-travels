@@ -10,13 +10,14 @@ const initialState = {
   message: '',
 }
 
-const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
+// const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
 
 // Get all verified users
 export const getAllVerifiedUsers = createAsyncThunk(
   '/admin/all-verified-users',
   async (_, thunkAPI) => {
     try {
+      const token = thunkAPI.getState().auth.user.token
       return await adminService.getAllVerifiedUsers(token)
     } catch (error) {
       const message =
@@ -35,6 +36,7 @@ export const getAllUnVerifiedUsers = createAsyncThunk(
   '/admin/all-unverified-users',
   async (_, thunkAPI) => {
     try {
+      const token = thunkAPI.getState().auth.user.token
       return await adminService.getAllUnVerifiedUsers(token)
     } catch (error) {
       const message =
@@ -53,6 +55,7 @@ export const deleteUser = createAsyncThunk(
   '/admin/delete-user',
   async (id, thunkAPI) => {
     try {
+      const token = thunkAPI.getState().auth.user.token
       return await adminService.deleteUser(id, token)
     } catch (error) {
       const message =

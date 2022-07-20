@@ -76,11 +76,11 @@ exports.login = async (req, res, next) => {
 
             const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-            // sendEmail({
-            //     to: user.email,
-            //     subject: "Email verification",
-            //     text: url
-            // });
+            sendEmail({
+                to: user.email,
+                subject: "Email verification",
+                text: url
+            });
 
             return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
 

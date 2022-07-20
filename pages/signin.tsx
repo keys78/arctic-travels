@@ -14,7 +14,6 @@ const signin = () => {
   const dispatch = useDispatch()
   const [activePanel, setActivePanel] = useState(true)
   const { user, isLoading, isError, isSuccess, message } = useSelector( (state: any) => state.auth )
-  console.log(user)
 
 
   const initialValues = {
@@ -66,7 +65,7 @@ const signin = () => {
     dispatch(login(userData))
 
     // if(isSuccess || user) {
-      router.push('/dashboard')
+      // router.push('/dashboard')
       // console.log(user)
     // }
   }
