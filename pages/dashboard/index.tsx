@@ -26,7 +26,14 @@ const Dashboard = () => {
       dispatch(resetUser())
     };
 
-  }, [user, router, message, dispatch])
+  }, [userData, router, message])
+
+
+  useEffect(() => {
+    if (localStorage.getItem("authToken")) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
 
 

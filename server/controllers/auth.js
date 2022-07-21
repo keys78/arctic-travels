@@ -23,12 +23,12 @@ exports.register = async (userDetails, role, res, next) => {
             ...userDetails, role
         });
 
-        const token = await new Token({
-            userId: user._id,
-            token: crypto.randomBytes(32).toString("hex"),
-        }).save();
+        // const token = await new Token({
+        //     userId: user._id,
+        //     token: crypto.randomBytes(32).toString("hex"),
+        // }).save();
 
-        const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+        // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
         // sendEmail({
         //     to: user.email,
@@ -69,32 +69,33 @@ exports.login = async (req, res, next) => {
 
 
         if (!user.verified) {
-            const token = await new Token({
-                userId: user._id,
-                token: crypto.randomBytes(32).toString("hex"),
-            }).save();
+            // const token = await new Token({
+            //     userId: user._id,
+            //     token: crypto.randomBytes(32).toString("hex"),
+            // }).save();
 
-            const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+            // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-            sendEmail({
-                to: user.email,
-                subject: "Email verification",
-                text: url
-            });
+            // sendEmail({
+            //     to: user.email, 
+            //     subject: "Email verification",
+            //     text: url
+            // });
 
-            return res.json({ success: true, message: `please confirm the verification email sent to you.`, status: 400 })
+            // return res.json({ success: false, verified: user.verified, message: `please confirm the verification email sent to you.`, status: 400 })
+            return next(new ErrorResponse('please confirm the verification email sent to you.', 401))
 
         }
 
-        // if (user.two_fa_status === 'on') {
+        if (user.two_fa_status === 'on') {
 
-        //     const otp = await new OTP ({
-        //         userId: user._id,
-        //         otp: generateCode()
-        //     }).save();
+            // const otp = await new OTP ({
+            //     userId: user._id,
+            //     otp: generateCode()
+            // }).save();
 
-        //     user.OTP_code = otp.otp
-        //     await user.save();
+            // user.OTP_code = otp.otp
+            // await user.save();
 
             // sendEmail({
             //     to: user.email,
@@ -102,10 +103,10 @@ exports.login = async (req, res, next) => {
             //     text: otp.otp
             // });
 
-        //     await otp.remove();
+            // await otp.remove();
 
-        //     return res.json({ success: false, message: `please enter the OTP sent to your email to continue`, otp: otp.otp })
-        // }
+            return res.json({ success: false, otpStatus:user.two_fa_status })
+        }
 
         // return res.json({ success: true, message: `login success`, status: 201 })
         sendToken(user, 200, res);

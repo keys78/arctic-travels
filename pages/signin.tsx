@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
 import { useSelector, useDispatch } from 'react-redux'
 import { register, login, reset } from '../features/auth/authSlice';
+import OTPField from '../components/OTP_popup';
 
 
 
@@ -15,6 +16,7 @@ const signin = () => {
   const [activePanel, setActivePanel] = useState(true)
   const { user, isLoading, isError, isSuccess, message } = useSelector( (state: any) => state.auth )
 
+ 
 
   const initialValues = {
     username: "",
@@ -34,16 +36,19 @@ const signin = () => {
 
 
   useEffect(() => {
-    if (isError) {
+    if(isError) {
       alert(message)
     }
 
-    if (isSuccess || user) {
-      router.push('/dashboard')
+    if(!isError && !isLoading) {
+      console.log(user)
     }
+    
+
 
     dispatch(reset())
-  }, [user, isError, isSuccess, message, router, dispatch])
+  }, [ user, isError, isSuccess, message, router, dispatch
+  ])
 
 
   const registerUsers = async (value: any) => {
@@ -55,6 +60,13 @@ const signin = () => {
       const userData = { ...values, }
 
       dispatch(register(userData))
+
+      if(isError) {
+        alert(message)
+      }
+
+     
+     
     }
   }
 
@@ -64,9 +76,20 @@ const signin = () => {
     const userData = { ...values, }
     dispatch(login(userData))
 
-    // if(isSuccess || user) {
-      // router.push('/dashboard')
-      // console.log(user)
+    if(isError) {
+      alert(message)
+    }
+
+    if(!isError && !isLoading) {
+      console.log(user)
+    }
+
+    if (isSuccess || user) {
+      router.push('/dashboard')
+    }
+  
+    // if(user) {
+    //   router.push('/dashboard')
     // }
   }
 
@@ -111,7 +134,7 @@ const signin = () => {
               <h1>Log In</h1>
               <Input name={'email'} value={values.email} label='email' type='email' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
               <Input name={'password'} value={values.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
-              <button className='btn-class-form new-btn'>Login In</button>
+              <button className='btn-class-form new-btn'><span>Log In</span> <span>{isLoading && loader()}</span></button>
               <span className='ready-span'>Don't have an account?  <span onClick={() => setActivePanel(!activePanel)}>Sign Up</span></span>
             </form>
           </div>
@@ -131,6 +154,7 @@ const signin = () => {
           </div>
         </div>
       </motion.div>
+      {user && user.otpStatus === "on" && <OTPField />}
 
     </>
   )
