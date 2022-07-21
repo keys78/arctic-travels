@@ -48,7 +48,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal }: modalProps) => {
             dispatch(resetUser())
         };
 
-    }, [auth, isError, message, dispatch])
+    }, [auth, user, isError, message])
 
     const confirmPasswordFor2FA = (e: any) => {
         e.preventDefault()

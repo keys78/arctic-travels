@@ -19,9 +19,6 @@ const PrivateNav = ({setIsPasswordModal, isPasswordModal}: modalProps) => {
     const router = useRouter()
 
     useEffect(() => {
-        if (isError) {
-          alert(message)
-        }
     
         dispatch(getUser())
     
