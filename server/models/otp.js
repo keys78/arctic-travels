@@ -11,7 +11,7 @@ unique:true,
 sparse:true
 	},
 	otp: { type: String, required: true },
-	createdAt: { type: Date, default: Date.now, expires: 60 },
+	createdAt: { type: Date, default: Date.now, expires: 3600 },
 });
 
 module.exports = mongoose.model("otp", otpSchema);

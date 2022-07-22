@@ -17,7 +17,7 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    if (!user) { router.push('/signin') }
+    if (!user) { router.push('/signin') } 
     if (isError) { console.log(message) }
 
     dispatch(getUser())
@@ -26,14 +26,14 @@ const Dashboard = () => {
       dispatch(resetUser())
     };
 
-  }, [userData, router, message])
+  }, [ router, message])
 
 
-  useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      router.push("/dashboard");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (localStorage.getItem("authToken")) {
+  //     router.push("/dashboard");
+  //   }
+  // }, [router]);
 
 
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
   return user ? (
     <>
       <PrivateNav isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} />
-      <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} />
+      <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData}/>
       {userData.role === "admin" && <ForAdmin />}
     </>
   ) : isError

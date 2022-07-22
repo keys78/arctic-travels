@@ -7,9 +7,12 @@ import Input from '../../components/Input'
 interface modalProps {
     setIsPasswordModal: any
     isPasswordModal: boolean
+    userData: any
 }
 
-const UserInfo = ({ setIsPasswordModal, isPasswordModal }: modalProps) => {
+
+
+const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps) => {
     const dispatch = useDispatch();
     const [greetings, setGreetings] = useState('')
     const initialValues = { password: "", };
@@ -22,8 +25,8 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal }: modalProps) => {
         })
     };
 
-    const { user, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
-    const { user: auth } = useSelector((state: any) => state.auth)
+    // const { user, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
+    // const { user: auth } = useSelector((state: any) => state.auth)
 
 
 
@@ -40,21 +43,21 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal }: modalProps) => {
 
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        dispatch(getUser())
+    //    dispatch(getUser())
 
-        return () => {
-            dispatch(resetUser())
-        };
+    //     return () => {
+    //         dispatch(resetUser())
+    //     };
 
-    }, [auth, user, isError, message])
+    // }, [ isSuccess, message])
 
     const confirmPasswordFor2FA = (e: any) => {
         e.preventDefault()
-        const thunkData = { id: user._id, password: value.password }
-        { user.two_fa_status === "off" && dispatch(activate2FA(thunkData)) }
-        { user.two_fa_status === "on" && dispatch(deActivate2FA(thunkData)) }
+        const thunkData = { id: userData._id, password: value.password }
+        { userData.two_fa_status === "off" && dispatch(activate2FA(thunkData)) }
+        { userData.two_fa_status === "on" && dispatch(deActivate2FA(thunkData)) }
         setIsPasswordModal(val => !isPasswordModal)
 
     }
@@ -71,9 +74,9 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal }: modalProps) => {
 
     return (
         <div className='data-spec'>
-            <h1>{greetings} {user.username} {user.role}</h1>
-            <p>{user._id}</p>
-            <p>Your 2FA Authentication is {user.two_fa_status === "on" ? "active" : "inactive"}</p>
+            <h1>{greetings} {userData.username} {userData.role}</h1>
+            <p>{userData._id}</p>
+            <p>Your 2FA Authentication is {userData.two_fa_status === "on" ? "active" : "inactive"}</p>
             {isPasswordModal && renderPasswordConfirmModal}
         </div>
     )
