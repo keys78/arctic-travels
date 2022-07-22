@@ -52,8 +52,26 @@ export const login = createAsyncThunk(
   }
 )
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout()
+// delete user
+export const verify2FA = createAsyncThunk(
+  '/verify2FA/',
+  async (obj, thunkAPI) => {
+    try {
+      return await authService.verify2FA(obj.id, obj.otp)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const logout = createAsyncThunk('auth/logout', () => {
+   authService.logout()
 })
 
 export const authSlice = createSlice({
@@ -91,12 +109,25 @@ export const authSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.user = action.payload
-      })
+      }) 
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
         state.user = null
+      })
+      .addCase(verify2FA.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(verify2FA.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.user = action.payload
+      })
+      .addCase(verify2FA.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null

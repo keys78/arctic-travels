@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { FC, useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { verify2FA } from '../features/auth/authSlice'
 
 interface Props { }
 
@@ -7,11 +10,16 @@ interface Props { }
 let currentOTPIndex: number = 0
 
 const OTPField = ({ }: Props) => {
+    const router = useRouter()
+    const dispatch = useDispatch()
     const [isLocked, setIsLocked] = useState(false)
     const [animate, setAnimate] = useState(false)
     const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
     const [activeOTPIndex, setActiveOTPIndex] = useState<number>(0);
     const inputRef = useRef<HTMLInputElement>(null)
+
+    const { user, isSuccess } = useSelector((state: any) => state.auth)
+
 
 
     const handleOnChange = (
@@ -23,7 +31,10 @@ const OTPField = ({ }: Props) => {
 
         if (!value) setActiveOTPIndex(currentOTPIndex - 1)
         else setActiveOTPIndex(currentOTPIndex + 1)
+
+
         setOtp(newOTP)
+        console.log(otp)
     }
 
     const handleOnKeyDown = (
@@ -39,6 +50,10 @@ const OTPField = ({ }: Props) => {
         inputRef.current?.focus();
     }, [activeOTPIndex])
 
+    useEffect(() => {
+
+    })
+
 
 
     const emptyCount = otp.filter(val => val.length === 0).length;
@@ -53,14 +68,28 @@ const OTPField = ({ }: Props) => {
     const verifyOTP = (value: any) => {
         value.preventDefault();
 
-        const allEqual = otp.every(v => v === otp[0])
-        if (allEqual === true) return setIsLocked(!isLocked)
-        else setIsLocked(false)
-        setAnimate(true)
+        const formatOTP = otp.join('')
+        const otpx = { otp: `${formatOTP}` }
 
-        setTimeout(() => {
-            setAnimate(false)
-        }, 1000)
+        // console.log(otpx)
+
+        const verifyData = { id: user.id, otp: otpx }
+        dispatch(verify2FA(verifyData))
+
+
+        if(isSuccess) {
+            router.push('/dashboard')
+          }
+
+
+        // const allEqual = otp.every(v => v === otp[0])
+        // if (allEqual === true) return setIsLocked(!isLocked)
+        // else setIsLocked(false)
+        // setAnimate(true)
+
+        // setTimeout(() => {
+        //     setAnimate(false)
+        // }, 1000)
     }
 
 

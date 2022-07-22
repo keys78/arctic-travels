@@ -44,6 +44,9 @@ const signin = () => {
       console.log(user)
     }
     
+    if(user && user.token) {
+      router.push('/dashboard')
+    }
 
 
     dispatch(reset())
@@ -84,9 +87,11 @@ const signin = () => {
       console.log(user)
     }
 
-    if (isSuccess || user) {
-      router.push('/dashboard')
-    }
+    console.log(user)
+
+    // if (isSuccess || user) {
+      // router.push('/dashboard')
+    // }
   
     // if(user) {
     //   router.push('/dashboard')

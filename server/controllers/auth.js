@@ -89,13 +89,13 @@ exports.login = async (req, res, next) => {
 
         if (user.two_fa_status === 'on') {
 
-            // const otp = await new OTP ({
-            //     userId: user._id,
-            //     otp: generateCode()
-            // }).save();
+            const otp = await new OTP ({
+                userId: user._id,
+                otp: generateCode()
+            }).save();
 
-            // user.OTP_code = otp.otp
-            // await user.save();
+            user.OTP_code = otp.otp
+            await user.save();
 
             // sendEmail({
             //     to: user.email,
@@ -105,7 +105,7 @@ exports.login = async (req, res, next) => {
 
             // await otp.remove();
 
-            return res.json({ success: false, otpStatus:user.two_fa_status })
+            return res.json({ success: false, otpStatus:user.two_fa_status, otp: user.OTP_code, id:user._id })
         }
 
         // return res.json({ success: true, message: `login success`, status: 201 })

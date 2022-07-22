@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 
 
 const UserSchema = new mongoose.Schema({
+    // _id:{ String },
     role: {
         type: String,
         default: "user",
@@ -24,14 +25,8 @@ const UserSchema = new mongoose.Schema({
 
     verified: { type: Boolean, default: false },
     two_fa_status: {type: String, default: 'off'},
-    OTP_code: { type: String, 
-        index: {
-            unique: true,
-            expireAfterSeconds:5,
-            partialFilterExpression: { status: 'PENDING' }
-          },
-        //   default : null
-    },
+
+    OTP_code: { type: String},
 
     password: {
         type: String,
