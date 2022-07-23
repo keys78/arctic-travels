@@ -6,7 +6,6 @@ import PrivateNav from '../../components/PrivateNav'
 import UserInfo from './UserInfo'
 import ForAdmin from './ForAdmin'
 
-import { logout, reset } from '../../features/auth/authSlice'
 
 
 const Dashboard = () => {
@@ -34,7 +33,7 @@ const Dashboard = () => {
       console.log(message)
     }
 
-    if (!user) {
+    if (!user && !user.token) {
       router.push('/signin')
     }
 
@@ -49,12 +48,6 @@ const Dashboard = () => {
     return 'LOADING..... ..... ..... '
   }
 
-  const onLogout = () => {
-    dispatch(logout())
-    dispatch(resetUser())
-    dispatch(reset())
-    router.push('/signin')
-  }
 
 
 
@@ -62,8 +55,7 @@ return user ? (
   <>
     <PrivateNav isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData}/>
     <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} />
-    {/* <div>{userData.username} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span onClick={onLogout}>Logout</span></div> */}
-    {/* {userData.role === "admin" && <ForAdmin />} */}
+    {userData.role === "admin" && <ForAdmin />}
   </>
 ) : isError
 }

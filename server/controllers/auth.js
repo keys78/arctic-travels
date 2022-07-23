@@ -106,6 +106,7 @@ exports.login = async (req, res, next) => {
             // await otp.remove();
 
             return res.json({ success: false, otpStatus:user.two_fa_status, otp: user.OTP_code, id:user._id })
+            // return next(new ErrorResponse({ id:user._id, success: false,  otpStatus:user.two_fa_status, otp: user.OTP_code }, 400))
         }
 
         // return res.json({ success: true, message: `login success`, status: 201 })
