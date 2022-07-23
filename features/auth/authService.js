@@ -16,7 +16,7 @@ const login = async (userData) => {
   }
 
   if (data.token) {
-    localStorage.setItem('authToken', JSON.stringify(data.token))
+    localStorage.setItem('authToken', JSON.stringify(data))
   }
 
   console.log(data)
@@ -31,6 +31,7 @@ const verify2FA = async (id, userData) => {
     localStorage.setItem('authToken', JSON.stringify(data.token))
   }
 
+  console.log(data)
   return data
 }
 

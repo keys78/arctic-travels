@@ -8,6 +8,7 @@ const user = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('a
 
 const initialState = {
   user: user ? user : null,
+  is2FA: false,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -54,7 +55,7 @@ export const login = createAsyncThunk(
 
 // delete user
 export const verify2FA = createAsyncThunk(
-  '/verify2FA/',
+  '/verify2FA',
   async (obj, thunkAPI) => {
     try {
       return await authService.verify2FA(obj.id, obj.otp)
@@ -123,6 +124,7 @@ export const authSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.user = action.payload
+        state.is2FA = true
       })
       .addCase(verify2FA.rejected, (state, action) => {
         state.isLoading = false

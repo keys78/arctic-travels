@@ -43,18 +43,13 @@ const signin = () => {
     if(!isError && !isLoading) {
       console.log(user)
     }
-    
-    if(user !== null) {
+
+    if(user && user.token) {
       router.push('/dashboard')
     }
-    // if(user.token) {
-    //   router.push('/dashboard')
-    // }
-
 
     dispatch(reset())
-  }, [ user, isError, isSuccess, message, router, dispatch
-  ])
+  }, [ user, isError, isSuccess, message, router, dispatch])
 
 
   const registerUsers = async (value: any) => {
@@ -70,8 +65,6 @@ const signin = () => {
       if(isError) {
         alert(message)
       }
-
-     
      
     }
   }
@@ -86,11 +79,8 @@ const signin = () => {
       alert(message)
     }
 
-    if(!isError && !isLoading) {
-      console.log(user)
-    }
+   
 
-    console.log(user)
   }
 
 

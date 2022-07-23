@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { verify2FA } from '../features/auth/authSlice'
+import { verify2FA, reset } from '../features/auth/authSlice'
 
 interface Props { }
 
@@ -18,7 +18,7 @@ const OTPField = ({ }: Props) => {
     const [activeOTPIndex, setActiveOTPIndex] = useState<number>(0);
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const { user, isSuccess } = useSelector((state: any) => state.auth)
+    const {user, is2FA, isSuccess } = useSelector((state: any) => state.auth)
 
 
 
@@ -51,10 +51,17 @@ const OTPField = ({ }: Props) => {
     }, [activeOTPIndex])
 
     useEffect(() => {
-        if(user !== null) {
-            router.push('/dashboard')
+       
+        // !user && router.push('/signin')
+        
+        
+        if(is2FA === true) {
+            // router.push('/dashboard')
           }
-    }, [user])
+          console.log('is2fa', is2FA)
+
+        dispatch(reset())
+      }, [user, is2FA, isSuccess, router, dispatch])
 
 
 
@@ -75,6 +82,10 @@ const OTPField = ({ }: Props) => {
 
         const verifyData = { id: user.id, otp: otpx }
         dispatch(verify2FA(verifyData))
+
+     
+       
+       
 
 
         // const allEqual = otp.every(v => v === otp[0])
