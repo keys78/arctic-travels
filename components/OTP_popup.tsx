@@ -51,8 +51,10 @@ const OTPField = ({ }: Props) => {
     }, [activeOTPIndex])
 
     useEffect(() => {
-
-    })
+        if(user !== null) {
+            router.push('/dashboard')
+          }
+    }, [user])
 
 
 
@@ -71,15 +73,8 @@ const OTPField = ({ }: Props) => {
         const formatOTP = otp.join('')
         const otpx = { otp: `${formatOTP}` }
 
-        // console.log(otpx)
-
         const verifyData = { id: user.id, otp: otpx }
         dispatch(verify2FA(verifyData))
-
-
-        if(isSuccess) {
-            router.push('/dashboard')
-          }
 
 
         // const allEqual = otp.every(v => v === otp[0])

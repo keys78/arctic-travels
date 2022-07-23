@@ -16,7 +16,7 @@ const getAllVerifiedUsers = async (token) => {
 // Get all verified users
 const getAllUnVerifiedUsers = async (token) => {
   const config = {
-    headers: {
+    headers: { 
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
