@@ -35,7 +35,6 @@ const verify2FA = async (id, userData) => {
 }
 
 
-// Logout user
 const logout = () => {
   localStorage.removeItem('authToken')
 }

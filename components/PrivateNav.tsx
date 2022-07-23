@@ -8,25 +8,26 @@ import { useRouter } from 'next/router'
 interface modalProps {
     setIsPasswordModal: any
     isPasswordModal: boolean
+    userData: any
 }
 
-const PrivateNav = ({setIsPasswordModal, isPasswordModal}: modalProps) => {
+const PrivateNav = ({setIsPasswordModal, isPasswordModal, userData}: modalProps) => {
     const [showDrop, setShowDrop] = useState(false)
-    const { user: userData, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
-    const { user } = useSelector((state: any) => state.auth)
+    // const { user: userData, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
+    // const { user } = useSelector((state: any) => state.auth)
 
     const dispatch = useDispatch()
     const router = useRouter()
 
-    useEffect(() => {
+    // useEffect(() => {
     
-        dispatch(getUser())
+    //     dispatch(getUser())
     
-        return () => {
-          dispatch(resetUser())
-        };
+    //     return () => {
+    //       dispatch(resetUser())
+    //     };
     
-      }, [user, router, isError, message, dispatch])
+    //   }, [user, router, isError, message, dispatch])
     
 
 
@@ -36,6 +37,7 @@ const PrivateNav = ({setIsPasswordModal, isPasswordModal}: modalProps) => {
 
       const onLogout = () => {
         dispatch(logout())
+        dispatch(resetUser())
         dispatch(reset())
         router.push('/signin')
       }

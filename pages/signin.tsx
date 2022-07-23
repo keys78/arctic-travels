@@ -39,14 +39,17 @@ const signin = () => {
     if(isError) {
       alert(message)
     }
-
+ 
     if(!isError && !isLoading) {
       console.log(user)
     }
     
-    if(user && user.token) {
+    if(user !== null) {
       router.push('/dashboard')
     }
+    // if(user.token) {
+    //   router.push('/dashboard')
+    // }
 
 
     dispatch(reset())
@@ -77,7 +80,7 @@ const signin = () => {
     value.preventDefault();
 
     const userData = { ...values, }
-    dispatch(login(userData))
+     dispatch(login(userData))
 
     if(isError) {
       alert(message)
@@ -88,14 +91,6 @@ const signin = () => {
     }
 
     console.log(user)
-
-    // if (isSuccess || user) {
-      // router.push('/dashboard')
-    // }
-  
-    // if(user) {
-    //   router.push('/dashboard')
-    // }
   }
 
 
