@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import PrivateNav from '../../components/PrivateNav'
 import UserInfo from './UserInfo'
 import ForAdmin from './ForAdmin'
+import Loader from '../../components/Loader'
 
 
 
@@ -34,17 +35,18 @@ const Dashboard = () => {
     }
   }, [user, router, isError, message, dispatch])
 
-  if (isLoading) {
-    return 'LOADING..... ..... ..... '
-  }
+  // if (isLoading) {
+  //    <Loader />
+  // }
 
 
 
 
 return user ? (
   <section className="private-wrapper">
+    {isLoading && <Loader />}
     <PrivateNav isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData}/>
-    <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} />
+    {/* <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} /> */}
     {userData.role === "admin" && <ForAdmin />}
   </section>
 ) : isError

@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { getUser, activate2FA, deActivate2FA, resetUser } from '../../features/private/privateSlice'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useEffect, useRef } from 'react'
+import { activate2FA, deActivate2FA } from '../../features/private/privateSlice'
+import { useDispatch } from 'react-redux'
 import Input from '../../components/Input'
+import { useOnClickOutside } from 'usehooks-ts'
+import { XCircle } from 'phosphor-react'
+
 
 
 interface modalProps {
@@ -14,6 +17,7 @@ interface modalProps {
 
 const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps) => {
     const dispatch = useDispatch();
+    const passwordConfirmRef = useRef(null)
     const [greetings, setGreetings] = useState('')
     const initialValues = { password: "", };
     const [value, setValue] = useState(initialValues);
@@ -24,10 +28,6 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
             [name]: value,
         })
     };
-
-    // const { user, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
-    // const { user: auth } = useSelector((state: any) => state.auth)
-
 
 
     useEffect(() => {
@@ -43,15 +43,11 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
 
     }, []);
 
-    // useEffect(() => {
 
-    //    dispatch(getUser())
 
-    //     return () => {
-    //         dispatch(resetUser())
-    //     };
+    const handleClickOutside = () => { setIsPasswordModal(prev => !isPasswordModal) }
+    useOnClickOutside(passwordConfirmRef, handleClickOutside)
 
-    // }, [ isSuccess, message])
 
     const confirmPasswordFor2FA = (e: any) => {
         e.preventDefault()
@@ -64,8 +60,8 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
 
     const renderPasswordConfirmModal = [
         <div className='password-confirm-modal'>
-            <form onSubmit={(e) => confirmPasswordFor2FA(e)}>
-                <span className='close-modal-p' onClick={() => setIsPasswordModal(prev => !isPasswordModal)}>close</span>
+            <form ref={passwordConfirmRef} onSubmit={(e) => confirmPasswordFor2FA(e)}>
+                <span className='close-modal-p' onClick={() => setIsPasswordModal(prev => !isPasswordModal)}><XCircle size={26} color="#141f38" weight="thin" /></span>
                 <Input name={'password'} value={value.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
                 <button className='btn-class-form new-btn'>Confirm</button>
             </form>
@@ -74,8 +70,8 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
 
     return (
         <div className='data-spec'>
-            <div className="photo-box">
-                <img src="https://source.unsplash.com/random/300x200?entertainment,models" alt="photo" />
+            <div className="photo-box shimmer">
+                <img src="https://source.unsplash.com/random/300x200" alt="photo" />
             </div>
             <h1>{greetings} {userData.username}</h1>
             <h2>{userData.email}</h2>
@@ -87,9 +83,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
                         <h1>{userData.two_fa_status === "on" ? "active" : "inactive"}</h1>
                     </div>
                 </div>
-
-
-                <div>{userData.role}</div>
+                <div className='user-role'>{userData.role}</div>
             </div>
             {isPasswordModal && renderPasswordConfirmModal}
         </div>

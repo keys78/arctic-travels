@@ -103,7 +103,7 @@ const signin = () => {
     <section
     className='auth-gen-wrap'
     >
-    <span className='close-cta-btn' onClick={() =>router.push('/')}><CaretCircleLeft size={32} color="#24243e"  /></span>
+    <span className='close-cta-btn' onClick={() =>router.push('/')}><CaretCircleLeft size={32} color="#24243e" weight='thin' /></span>
       <motion.div
         variants={variants}
         initial="hidden"
