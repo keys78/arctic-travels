@@ -74,9 +74,23 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
 
     return (
         <div className='data-spec'>
-            <h1>{greetings} {userData.username} {userData.role}</h1>
-            <p>{userData._id}</p>
-            <p>Your 2FA Authentication is {userData.two_fa_status === "on" ? "active" : "inactive"}</p>
+            <div className="photo-box">
+                <img src="https://source.unsplash.com/random/300x200?entertainment,models" alt="photo" />
+            </div>
+            <h1>{greetings} {userData.username}</h1>
+            <h2>{userData.email}</h2>
+            <div className="flex items-center justify-between activity-series">
+                <div className="flex items-center space-x-3">
+                    <p className="tfa-text">2FA </p>
+                    <div className={`status-tfa ${(userData.two_fa_status === "on") ? 'status-active' : 'status-inactive'} `}>
+                        <span></span>
+                        <h1>{userData.two_fa_status === "on" ? "active" : "inactive"}</h1>
+                    </div>
+                </div>
+
+
+                <div>{userData.role}</div>
+            </div>
             {isPasswordModal && renderPasswordConfirmModal}
         </div>
     )

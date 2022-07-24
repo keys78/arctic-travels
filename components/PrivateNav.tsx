@@ -13,21 +13,10 @@ interface modalProps {
 
 const PrivateNav = ({setIsPasswordModal, isPasswordModal, userData}: modalProps) => {
     const [showDrop, setShowDrop] = useState(false)
-    // const { user: userData, isLoading, isSuccess, isError, message } = useSelector((state: any) => state.private)
-    // const { user } = useSelector((state: any) => state.auth)
 
     const dispatch = useDispatch()
     const router = useRouter()
 
-    // useEffect(() => {
-    
-    //     dispatch(getUser())
-    
-    //     return () => {
-    //       dispatch(resetUser())
-    //     };
-    
-    //   }, [user, router, isError, message, dispatch])
     
 
 

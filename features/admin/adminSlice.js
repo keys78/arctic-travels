@@ -10,14 +10,14 @@ const initialState = {
   message: '',
 }
 
-const token = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
+const token2 = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('authToken'))
 
 // Get all verified users
 export const getAllVerifiedUsers = createAsyncThunk(
   '/admin/all-verified-users',
   async (_, thunkAPI) => {
     try {
-      // const token = thunkAPI.getState().auth.user.token
+      const token = thunkAPI.getState().auth.user.token || token2
       return await adminService.getAllVerifiedUsers(token)
     } catch (error) {
       const message =
@@ -36,7 +36,7 @@ export const getAllUnVerifiedUsers = createAsyncThunk(
   '/admin/all-unverified-users',
   async (_, thunkAPI) => {
     try {
-      // const token = thunkAPI.getState().auth.user.token
+      const token = thunkAPI.getState().auth.user.token || token2
       return await adminService.getAllUnVerifiedUsers(token)
     } catch (error) {
       const message =
@@ -55,7 +55,7 @@ export const deleteUser = createAsyncThunk(
   '/admin/delete-user',
   async (id, thunkAPI) => {
     try {
-      // const token = thunkAPI.getState().auth.user.token
+      const token = thunkAPI.getState().auth.user.token || token2
       return await adminService.deleteUser(id, token)
     } catch (error) {
       const message =
@@ -110,8 +110,9 @@ export const adminSlice = createSlice({
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        // state.verifiedUsers = state.verifiedUsers.filter( (user) => user._id !== action.payload.id )
-        // state.unVerifiedUsers = state.unVerifiedUsers.filter( (user) => user._id !== action.payload.id )
+        state.verifiedUsers = state.verifiedUsers.filter( (user) => user._id !== action.payload.id )
+        state.unVerifiedUsers = state.unVerifiedUsers.filter( (user) => user._id !== action.payload.id )
+        state.message = action.payload.message
       })
       .addCase(deleteUser.rejected, (state, action) => {
         state.isLoading = false

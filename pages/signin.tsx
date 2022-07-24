@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Input from '../components/Input'
 import Image from 'next/image';
+import {CaretCircleLeft} from 'phosphor-react'
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
@@ -14,9 +15,9 @@ const signin = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [activePanel, setActivePanel] = useState(true)
-  const { user, isLoading, isError, isSuccess, message } = useSelector( (state: any) => state.auth )
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state: any) => state.auth)
 
- 
+
 
   const initialValues = {
     username: "",
@@ -36,20 +37,20 @@ const signin = () => {
 
 
   useEffect(() => {
-    if(isError) {
+    if (isError) {
       alert(message)
     }
- 
-    if(!isError && !isLoading) {
+
+    if (!isError && !isLoading) {
       console.log(user)
     }
 
-    if(user && user.token) {
+    if (user && user.token) {
       router.push('/dashboard')
     }
 
     dispatch(reset())
-  }, [ user, isError, isSuccess, message, router, dispatch])
+  }, [user, isError, isSuccess, message, router, dispatch])
 
 
   const registerUsers = async (value: any) => {
@@ -62,10 +63,10 @@ const signin = () => {
 
       dispatch(register(userData))
 
-      if(isError) {
+      if (isError) {
         alert(message)
       }
-     
+
     }
   }
 
@@ -73,13 +74,13 @@ const signin = () => {
     value.preventDefault();
 
     const userData = { ...values, }
-     dispatch(login(userData))
+    dispatch(login(userData))
 
-    if(isError) {
+    if (isError) {
       alert(message)
     }
 
-   
+
 
   }
 
@@ -99,7 +100,10 @@ const signin = () => {
 
 
   return (
-    <>
+    <section
+    className='auth-gen-wrap'
+    >
+    <span className='close-cta-btn' onClick={() =>router.push('/')}><CaretCircleLeft size={32} color="#24243e"  /></span>
       <motion.div
         variants={variants}
         initial="hidden"
@@ -146,7 +150,7 @@ const signin = () => {
       </motion.div>
       {user && user.otpStatus === "on" && <OTPField />}
 
-    </>
+    </section>
   )
 }
 

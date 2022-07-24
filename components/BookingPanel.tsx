@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image';
 import Button from './Button';
 import { countryList, personsList } from '../utils/data';
-import moment from 'moment'
 
 const bookingDetails: { title: string; icon: string }[] = [
     {
@@ -23,7 +22,6 @@ const bookingDetails: { title: string; icon: string }[] = [
     },
 ]
 
-const testst = moment(new Date).format('MM/DD/YYYY hh:mm:ss a');
 
 
 
@@ -46,10 +44,11 @@ const BookingPanel = () => {
                 <h1 className='bp-title'>{val.title}</h1>
             </div>
 
-            {val.title === 'location' && <div className="select-container"><select > {renderList} </select></div>}
-            {val.title === 'person' && <select > {renderPersons} </select>}
-            {val.title === 'check out' && <input type={'date'} name={testst} />}
+            {val.title === 'location' &&<select className="ctx-select ctx-arrows"> {renderList} </select>}
+            {val.title === 'person' && <select className="ctx-select ctx-arrows" > {renderPersons} </select>}
+            {val.title === 'check out' && <input type={'date'} />}
             {val.title === 'check in' && <input type={'date'} />}
+
 
         </div>
     ))
@@ -58,8 +57,8 @@ const BookingPanel = () => {
             <div className='bp-wrapper '>
                 {renderBookingPanel}
                 <Button text='Book Now' icon={'/images/fly_plane.png'} background='primary-blue' color="white" onClick={() => alert('Hello Wworls')} />
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
