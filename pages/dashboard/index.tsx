@@ -8,6 +8,7 @@ import ForAdmin from './ForAdmin'
 
 
 
+
 const Dashboard = () => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -16,24 +17,13 @@ const Dashboard = () => {
   const { user: userData, isLoading, isError, message } = useSelector((state: any) => state.private)
 
 
-  // useEffect(() => {
-  //   if (!user) { router.push('/signin') } 
-  //   if (isError) { console.log(message) }
-
-  //   dispatch(getUser())
-
-  //   return () => {
-  //     dispatch(resetUser())
-  //   };
-
-  // }, [user, router, message])
 
   useEffect(() => {
     if (isError) {
       console.log(message)
     }
 
-    if (!user && !user.token) {
+    if (!user && (user && !user.token)) {
       router.push('/signin')
     }
 
@@ -52,11 +42,11 @@ const Dashboard = () => {
 
 
 return user ? (
-  <>
+  <section className="private-wrapper">
     <PrivateNav isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData}/>
     <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} />
     {userData.role === "admin" && <ForAdmin />}
-  </>
+  </section>
 ) : isError
 }
 

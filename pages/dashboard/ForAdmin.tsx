@@ -5,9 +5,12 @@ import { getAllUnVerifiedUsers, getAllVerifiedUsers, deleteUser, resetUsers } fr
 
 const ForAdmin = () => {
     const dispatch = useDispatch();
-    const { verifiedUsers, unVerifiedUsers, isSuccess: issuccess, isError: iserror } = useSelector((state: any) => state.admin)
+    const { verifiedUsers, unVerifiedUsers, isSuccess, isError, message } = useSelector((state: any) => state.admin)
 
     useEffect(() => {
+        if(!isError && message !== "") {
+            alert(message)
+        }
 
         dispatch(getAllVerifiedUsers())
         dispatch(getAllUnVerifiedUsers())
@@ -16,7 +19,7 @@ const ForAdmin = () => {
             dispatch(resetUsers())
         };
 
-    }, [])
+    }, [ dispatch, message ])
 
     const renderUnVerified = unVerifiedUsers && unVerifiedUsers.map((val: any) => (
         <div key={val._id}>

@@ -16,13 +16,13 @@ import { variants } from '../utils/data';
 
 const Home: NextPage = () => {
 
-   return (
+  return (
     <motion.main
       variants={variants}
-      initial="hidden" 
-      animate="enter"  
-      exit="exit" 
-      transition={{ type: 'linear' }} 
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      transition={{ type: 'linear' }}
     >
       <Head>
         <title>Create Next App</title>
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
       <Passes />
       <Footer />
     </motion.main>
-    
+
   )
 }
 
