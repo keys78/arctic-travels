@@ -5,6 +5,7 @@ const sendEmail = require('../utils/sendEmail')
 const Token = require('../models/token')
 const OTP = require('../models/otp');
 const generateCode = require("../utils/otpGenerator");
+const confirmEmailMessage = require('../utils/confirmEmailTemplate')
 
 
 
@@ -23,18 +24,19 @@ exports.register = async (userDetails, role, res, next) => {
             ...userDetails, role
         });
 
-        // const token = await new Token({
-        //     userId: user._id,
-        //     token: crypto.randomBytes(32).toString("hex"),
-        // }).save();
+        const token = await new Token({
+            userId: user._id,
+            token: crypto.randomBytes(32).toString("hex"),
+        }).save();
 
-        // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+        const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+       
 
-        // sendEmail({
-        //     to: user.email,
-        //     subject: "Email verification",
-        //     text: url
-        // });
+        sendEmail({
+            to: user.email,
+            subject: "Email Verification",
+            text: confirmEmailMessage(url)
+        });
 
         res.json({
             success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201
@@ -77,19 +79,19 @@ exports.login = async (req, res, next) => {
             // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
             // sendEmail({
-            //     to: user.email, 
-            //     subject: "Email verification",
-            //     text: url
+            //     to: user.email,
+            //     subject: "Email Verification",
+            //     text: confirmEmailMessage(url)
             // });
 
-            // return res.json({ success: false, verified: user.verified, message: `please confirm the verification email sent to you.`, status: 400 })
+
             return next(new ErrorResponse('please confirm the verification email sent to you.', 401))
 
         }
 
         if (user.two_fa_status === 'on') {
 
-            const otp = await new OTP ({
+            const otp = await new OTP({
                 userId: user._id,
                 otp: generateCode()
             }).save();
@@ -105,7 +107,7 @@ exports.login = async (req, res, next) => {
 
             // await otp.remove();
 
-            return res.json({ success: false, otpStatus:user.two_fa_status, otp: user.OTP_code, id:user._id })
+            return res.json({ success: false, otpStatus: user.two_fa_status, id: user._id })
             // return next(new ErrorResponse({ id:user._id, success: false,  otpStatus:user.two_fa_status, otp: user.OTP_code }, 400))
         }
 
@@ -151,10 +153,10 @@ exports.verifyOTP = async (req, res, next) => {
     try {
         if (!user) return res.status(400).send({ message: "invalid user" });
 
-        if(otp !== user.OTP_code) {
+        if (otp !== user.OTP_code) {
             return next(new ErrorResponse('invalid token, please try again', 400))
         }
-        
+
         user.OTP_code = null
         await user.save();
         // return res.json({ success: true, message: `login success`, status: 201 })
@@ -180,18 +182,3 @@ const sendToken = (user, statusCode, res) => {
 
 
 
-
-
-
-
-
-// exports.verifyEmail =  async (req, res) => {
-// 	try {
-// 		const user = await User.findOne({ _id: req.params.id });
-// 		if (!user) return res.status(400).send({ message: "Invalid link" });
-// 		const token = await Token.findOne({	userId: user._id,token: req.params.token,	});
-// 		if (!token) return res.status(400).send({ message: "Invalid link" });
-// 		await User.updateOne({ _id: user._id, verified: true });
-// 		await token.remove();
-// 		res.status(200).send({ message: "Email verified successfully" });
-// 	} catch (error) {res.status(500).send({ message: "Internal Server Error" });}}
