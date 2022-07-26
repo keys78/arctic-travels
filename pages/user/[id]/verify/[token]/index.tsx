@@ -1,42 +1,58 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from 'next/router'
 
 const users = () => {
 	const [validUrl, setValidUrl] = useState(false);
-	const params = useParams()
-    const router = useRouter()
+	const router = useRouter()
+	const [isAnimating, setIsAnimating] = useState(true)
 
 	useEffect(() => {
-        router.isReady && verifyEmailUrl();
+		router.isReady && verifyEmailUrl();
 	}, [router.isReady]);
 
-    const verifyEmailUrl = async () => {
-        try {
-            const url = `http://localhost:4000/auth/${router.query.id}/verify/${router.query.token}`;
-            const { data } = await axios.get(url);
-        
-            console.log(router.query.id)
-            console.log(router.query.token)
+	useEffect(() => {
+		setTimeout(function () {
+			setIsAnimating(!isAnimating)
+		}, 4500);
+	}, [])
 
-            setValidUrl(true);
-        } catch (error) {
-            console.log(error);
-            setValidUrl(false);
-        }
-    };
+
+	const verifyEmailUrl = async () => {
+		try {
+			const url = `http://localhost:4000/auth/${router.query.id}/verify/${router.query.token}`;
+			await axios.get(url);
+
+			setValidUrl(true);
+		} catch (error) {
+			console.log(error);
+			setValidUrl(false);
+		}
+	};
 
 	return (
 		<>
 			{validUrl ? (
-				<div>
-					<h1>Email verified successfully</h1>
-					<Link href="/login"><a >Login</a></Link>
+				<div className="veri-board">
+					<div>
+						{isAnimating && <img className="animated-gif" src="/images/fp.gif" alt="gif" />}
+						{!isAnimating &&
+							<>
+								<img className="animated-gif" src="/images/veri_green.jpg" alt="png" />
+								<h1>Email verified successfully </h1>
+								<Link href="/signin"><a className='btn-class-form new-btn' >Login</a></Link>
+							</>
+						}
+					</div>
 				</div>
 			) : (
-				<h1>404 Not Found</h1>
+				<div className="veri-false">
+					<div>
+						<img src="/images/f_o_f.gif" alt="not found" />
+						<h1>404 | Page Not Found</h1>
+					</div>
+				</div>
 			)}
 		</>
 	);
