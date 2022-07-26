@@ -35,9 +35,6 @@ const Dashboard = () => {
     }
   }, [user, router, isError, message, dispatch])
 
-  // if (isLoading) {
-  //    <Loader />
-  // }
 
 
 
@@ -46,7 +43,7 @@ return user ? (
   <section className="private-wrapper">
     {isLoading && <Loader />}
     <PrivateNav isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData}/>
-    {/* <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} /> */}
+    <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} />
     {userData.role === "admin" && <ForAdmin />}
   </section>
 ) : isError

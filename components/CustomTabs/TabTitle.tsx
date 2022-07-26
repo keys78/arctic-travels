@@ -1,18 +1,23 @@
-import React from "react"
+import React, { useCallback } from "react"
 
 type Props = {
-  title: string
-  index: number
-  setSelectedTab: (index: number) => void
+    title: string
+    index: number
+    setSelectedTab: (index: number) => void
+    selectedTab: number
 }
 
-const TabTitle: React.FC<Props> = ({ title, setSelectedTab, index }) => {
+const TabTitle: React.FC<Props> = ({ title, setSelectedTab, index, selectedTab }) => {
 
-  return (
-    <li>
-      <button onClick={() => setSelectedTab(index)}>{title}</button>
-    </li>
-  )
+    const onClick = useCallback(() => {
+        setSelectedTab(index)
+    }, [setSelectedTab, index])
+
+    return (
+        <li className={`li ${selectedTab === index ? 'active' : ''}`}>
+            <button onClick={onClick}>{title}</button>
+        </li>
+    )
 }
 
 export default TabTitle;
