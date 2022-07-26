@@ -1,4 +1,4 @@
-const otpMessage = `
+const otpMessage = (otp, user) => `
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 </style>
@@ -40,13 +40,13 @@ const otpMessage = `
                                         <td align="center" bgcolor="#FFFFFF" width="400">
                                             <div
                                                 style="font-size: 16px; line-height:1.4; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #082446;">
-                                                Hi <span style="font-weight: bold;">{user.username}</span>,
+                                                Hi <span style="font-weight: bold;">${user.username}</span>,
                                             </div>
                                             <div>&nbsp;</div>
                                             <div
                                                 style="font-size: 16px; line-height:1.4; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #082446;">
                                                 Your one-time login access code is
-                                                <span style="font-weight:bold;">{otp.otp}
+                                                <span style="font-weight:bold;">${otp.otp}
                                                 </span>
                                             </div>
 

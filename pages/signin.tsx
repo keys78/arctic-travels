@@ -49,6 +49,8 @@ const signin = () => {
       router.push('/dashboard')
     }
 
+    console.log('user', user)
+
     dispatch(reset())
   }, [user, isError, isSuccess, message, router, dispatch])
 

@@ -6,6 +6,7 @@ const Token = require('../models/token')
 const OTP = require('../models/otp');
 const generateCode = require("../utils/otpGenerator");
 const confirmEmailMessage = require('../utils/confirmEmailTemplate')
+const otpMessage = require('../utils/otpEmailTemplate')
 
 
 
@@ -99,11 +100,11 @@ exports.login = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            // sendEmail({
-            //     to: user.email,
-            //     subject: "One Time Password",
-            //     text: otp.otp
-            // });
+            sendEmail({
+                to: user.email,
+                subject: "One-Time Login Access",
+                text:otpMessage(otp, user)
+            });
 
             // await otp.remove();
 
