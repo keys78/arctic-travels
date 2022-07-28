@@ -58,7 +58,6 @@ exports.deleteUser = async (req, res, next) => {
             });
 
             if (!token) {
-                // return res.status(400).send({ message: "no token, account has been deleted" });
                 return res.json({ id: user._id, message: "no token, account has been deleted" });
             }
 

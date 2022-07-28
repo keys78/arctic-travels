@@ -25,22 +25,22 @@ exports.register = async (userDetails, role, res, next) => {
             ...userDetails, role
         });
 
-        const token = await new Token({
-            userId: user._id,
-            token: crypto.randomBytes(32).toString("hex"),
-        }).save();
+        // const token = await new Token({
+        //     userId: user._id,
+        //     token: crypto.randomBytes(32).toString("hex"),
+        // }).save();
 
-        const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+        // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
        
 
-        sendEmail({
-            to: user.email,
-            subject: "Email Verification",
-            text: confirmEmailMessage(url)
-        });
+        // sendEmail({
+        //     to: user.email,
+        //     subject: "Email Verification",
+        //     text: confirmEmailMessage(url)
+        // });
 
         res.json({
-            success: true, message: `Welcome ${user.username} to Arcic Travels, Please confirm the verification email sent to you.`, status: 201
+            success: true, message: `Welcome ${user.username} to Arctic Travels, Please confirm the verification email sent to you.`, status: 201
         })
 
 
@@ -100,20 +100,52 @@ exports.login = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            sendEmail({
-                to: user.email,
-                subject: "One-Time Login Access",
-                text:otpMessage(otp, user)
-            });
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "One-Time Login Access",
+            //     text:otpMessage(otp, user)
+            // });
 
-            // await otp.remove();
+            await otp.remove();
 
-            return res.json({ success: false, otpStatus: user.two_fa_status, id: user._id })
-            // return next(new ErrorResponse({ id:user._id, success: false,  otpStatus:user.two_fa_status, otp: user.OTP_code }, 400))
+            return res.json({otp:otp.otp, success: false, otpStatus: user.two_fa_status, id: user._id })
         }
 
         // return res.json({ success: true, message: `login success`, status: 201 })
         sendToken(user, 200, res);
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+
+exports.resendOTP = async (req, res, next) => {
+    const {id} = req.params
+    const user = await User.findById(`${id}`);
+
+    try {
+        if (user.two_fa_status === 'on') {
+
+            const otp = await new OTP({
+                userId: user,
+                otp: generateCode()
+            }).save();
+
+            user.OTP_code = otp.otp
+            await user.save();
+
+            // sendEmail({
+            //     to: user.email,
+            //     subject: "One-Time Login Access",
+            //     text:otpMessage(otp, user)
+            // });
+
+            await otp.remove();
+
+            return res.json({message: 'one-time login has been sent your email', otpStatus: user.two_fa_status,})
+        }
+        return res.json(user)
 
     } catch (error) {
         next(error)

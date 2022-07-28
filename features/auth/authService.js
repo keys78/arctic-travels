@@ -23,6 +23,13 @@ const login = async (userData) => {
   return data
 }
 
+const resendOTP = async (id, userData) => {
+  const {data} = await axios.post(`${AUTH_API_URL + `resend-otp/${id}`}`, userData)
+ 
+  console.log(data)
+  return data
+}
+
 
 const verify2FA = async (id, userData) => {
   const {data} = await axios.post(`${AUTH_API_URL + `verify2FA/${id}`}`, userData)
@@ -44,6 +51,7 @@ const authService = {
   register,
   login,
   verify2FA,
+  resendOTP,
   logout,
 }
  

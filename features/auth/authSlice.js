@@ -8,7 +8,6 @@ const user = typeof window !== 'undefined' && JSON.parse(localStorage.getItem('a
 
 const initialState = {
   user: user ? user : null,
-  is2FA: false,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -40,6 +39,25 @@ export const login = createAsyncThunk(
   async (user, thunkAPI) => {
     try {
       return await authService.login(user)
+    } catch (error) {
+      const message =
+        error.response.data.error ||
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message
+      error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//resend OTP
+export const resendOTP = createAsyncThunk(
+  'auth/resend-otp',
+  async (obj, thunkAPI) => {
+    try {
+      return await authService.resendOTP(obj.id, obj.userData)
     } catch (error) {
       const message =
         error.response.data.error ||
@@ -94,8 +112,9 @@ export const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = false
-        state.isError = true
-        state.message = action.payload
+        state.user = action.payload
+        // state.isError = true
+        // state.message = action.payload
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false
@@ -124,12 +143,24 @@ export const authSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.user = action.payload
-        state.is2FA = true
       })
       .addCase(verify2FA.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
+      })
+      .addCase(resendOTP.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(resendOTP.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.user = action.payload
+      })
+      .addCase(resendOTP.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = "unable to resend token"
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null

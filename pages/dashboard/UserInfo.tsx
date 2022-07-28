@@ -54,6 +54,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
         const thunkData = { id: userData._id, password: value.password }
         { userData.two_fa_status === "off" && dispatch(activate2FA(thunkData)) }
         { userData.two_fa_status === "on" && dispatch(deActivate2FA(thunkData)) }
+        setValue(prev => initialValues)
         setIsPasswordModal(val => !isPasswordModal)
 
     }
@@ -71,7 +72,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
     return (
         <div className='data-spec'>
             <div className="photo-box shimmer">
-                <img src="https://source.unsplash.com/random/300x200" alt="photo" />
+                <img src="https://source.unsplash.com/random/300x200"  />
             </div>
             <h1>{greetings} {userData.username}</h1>
             <h2>{userData.email}</h2>
