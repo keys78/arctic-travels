@@ -3,6 +3,8 @@ import type { AppProps } from 'next/app'
 import { AnimatePresence } from 'framer-motion'
 import { store } from '../app/store'
 import { Provider } from 'react-redux'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -20,6 +22,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <Component {...pageProps} key={router.route} />
         </Provider>
       </AnimatePresence>
+
+      <ToastContainer />
     </div>
   )
 }

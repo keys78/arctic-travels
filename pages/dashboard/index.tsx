@@ -16,6 +16,8 @@ const Dashboard = () => {
   const [isPasswordModal, setIsPasswordModal] = useState(false)
   const { user } = useSelector((state: any) => state.auth)
   const { user: userData, isLoading, isError, message } = useSelector((state: any) => state.private)
+  const { verifiedUsers, unVerifiedUsers } = useSelector((state: any) => state.admin)
+
 
 
 
@@ -38,13 +40,12 @@ const Dashboard = () => {
 
 
 
-
 return user ? (
-  <section className="private-wrapper">
+  <section className={userData.role === "admin"? "private-wrapper-admin" : "private-wrapper"} >
     {isLoading && <Loader />}
     <PrivateNav isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData}/>
     <UserInfo isPasswordModal={isPasswordModal} setIsPasswordModal={setIsPasswordModal} userData={userData && userData} />
-    {userData.role === "admin" && <ForAdmin />}
+    {userData.role === "admin" && verifiedUsers && unVerifiedUsers && <ForAdmin />}
   </section>
 ) : isError
 }

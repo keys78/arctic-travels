@@ -9,8 +9,9 @@ const Tabs: React.FC<Props> = ({ children }) => {
   const [selectedTab, setSelectedTab] = useState(0)
 
   return (
-    <div>
-      <ul className="radu">
+    <>
+      <ul className="tabs-wrapper">
+        <div>
         {children.map((item, index) => (
           <TabTitle
             key={index}
@@ -20,9 +21,11 @@ const Tabs: React.FC<Props> = ({ children }) => {
             selectedTab={selectedTab}
           />
         ))}
+        </div>
+       
       </ul>
       {children[selectedTab]}
-    </div>
+    </>
   )
 }
 

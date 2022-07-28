@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Input from '../components/Input'
 import Image from 'next/image';
-import {CaretCircleLeft} from 'phosphor-react'
+import { CaretCircleLeft } from 'phosphor-react'
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
 import { useSelector, useDispatch } from 'react-redux'
 import { register, login, reset } from '../features/auth/authSlice';
 import OTPField from '../components/OTP_popup';
+import { toast } from 'react-toastify'
+import Loader from '../components/Loader';
 
 
 
@@ -15,8 +17,8 @@ const signin = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [activePanel, setActivePanel] = useState(true)
+  const [isOtpModal, setIsOtpModal] = useState(false)
   const { user, isLoading, isError, isSuccess, message } = useSelector((state: any) => state.auth)
-
 
 
   const initialValues = {
@@ -38,11 +40,11 @@ const signin = () => {
 
   useEffect(() => {
     if (isError) {
-      alert(message)
+      toast.error(message)
     }
 
-    if (!isError && !isLoading) {
-      console.log(user)
+    if (!isError) {
+      toast.success(user, { autoClose: 20000 });
     }
 
     if (user && user.token) {
@@ -59,7 +61,7 @@ const signin = () => {
     value.preventDefault()
 
     if (values.password !== values.confirmPassword) {
-      alert('Passwords do not match')
+      toast.error('Passwords do not match')
     } else {
       const userData = { ...values, }
 
@@ -68,6 +70,8 @@ const signin = () => {
       if (isError) {
         alert(message)
       }
+
+      setValues(prev => initialValues)
 
     }
   }
@@ -81,9 +85,8 @@ const signin = () => {
     if (isError) {
       alert(message)
     }
-
-
-
+    !isError && setIsOtpModal(!isLoading)
+    setValues(prev => initialValues)
   }
 
 
@@ -103,9 +106,10 @@ const signin = () => {
 
   return (
     <section
-    className='auth-gen-wrap'
+      className='auth-gen-wrap'
     >
-    <span className='close-cta-btn' onClick={() =>router.push('/')}><CaretCircleLeft size={32} color="#24243e" weight='thin' /></span>
+      {isLoading && <Loader />}
+      <span className='close-cta-btn' onClick={() => router.push('/')}><CaretCircleLeft size={32} color="#24243e" weight='thin' /></span>
       <motion.div
         variants={variants}
         initial="hidden"
@@ -150,7 +154,8 @@ const signin = () => {
           </div>
         </div>
       </motion.div>
-      {user && user.otpStatus === "on" && <OTPField />}
+      {user && user.otpStatus === "on" && isOtpModal && <OTPField isOtpModal={isOtpModal} setIsOtpModal={setIsOtpModal}/>}
+      {/* {<OTPField />} */}
 
     </section>
   )

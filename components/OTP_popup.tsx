@@ -1,15 +1,19 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { FC, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { verify2FA, reset } from '../features/auth/authSlice'
+import { verify2FA, resendOTP, reset } from '../features/auth/authSlice'
+import { toast } from 'react-toastify'
+import { XCircle } from 'phosphor-react'
 
-interface Props { }
+interface Props { 
+    isOtpModal: any,
+    setIsOtpModal: any
+ }
 
 
 let currentOTPIndex: number = 0
 
-const OTPField = ({ }: Props) => {
+const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
     const router = useRouter()
     const dispatch = useDispatch()
     const [isLocked, setIsLocked] = useState(false)
@@ -18,7 +22,7 @@ const OTPField = ({ }: Props) => {
     const [activeOTPIndex, setActiveOTPIndex] = useState<number>(0);
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const {user, is2FA, isSuccess } = useSelector((state: any) => state.auth)
+    const {user, isSuccess, isError } = useSelector((state: any) => state.auth)
 
 
 
@@ -50,18 +54,10 @@ const OTPField = ({ }: Props) => {
         inputRef.current?.focus();
     }, [activeOTPIndex])
 
-    useEffect(() => {
-       
-        // !user && router.push('/signin')
-        
-        
-        if(is2FA === true) {
-            // router.push('/dashboard')
-          }
-          console.log('is2fa', is2FA)
-
-        dispatch(reset())
-      }, [user, is2FA, isSuccess, router, dispatch])
+    // useEffect(() => {
+         
+    //     dispatch(reset())
+    //   }, [user, isSuccess, router, dispatch])
 
 
 
@@ -71,7 +67,19 @@ const OTPField = ({ }: Props) => {
         if (emptyCount === 1) return emptyCount + " " + `Digit left`
         if (emptyCount !== 0) return emptyCount + " " + `Digits left`
     }
+    
+    const resendOTPHandler = (value: any) => {
+        value.preventDefault();
 
+        const userData = {}
+        const resendData = { id: user.id, userData: userData }
+        dispatch(resendOTP(resendData))
+
+        if(!isError) {
+            toast.success(user.message, {autoClose: 2000})
+        }
+
+    }
 
 
     const verifyOTP = (value: any) => {
@@ -98,18 +106,21 @@ const OTPField = ({ }: Props) => {
         // }, 1000)
     }
 
+   
+
 
 
     return (
         <div className="otp-wrapper">
-            {/* <Link href={'/'}><a>Back</a></Link> */}
-            <div className="otp-container">
+           
+            <div className="otp-container relative">
+            <button className="absolute top-2 right-2" onClick={() =>setIsOtpModal(!isOtpModal)}><XCircle size={20} color="#e71818" weight="thin" /></button>
                 <div className={`container-lock ${!isLocked ? 'otp-null' : 'unlocked otp-success'}`}>
                     <span className={`lock ${!isLocked ? (animate && 'lock-shake') : 'unlocked'}`}></span>
                 </div>
                 <div>
-                    <h1 className="text-lg truncate">Please enter OTP to verify your account</h1>
-                    <h2 className="text-sm opacity-70 pb-6">OTP has been sent to your email</h2>
+                    <h1 className="text-lg sm:text-sm truncate">Please enter OTP to verify your account</h1>
+                    <h2 className="text-sm sm:text-xs opacity-70 pb-6">OTP has been sent to your email</h2>
                 </div>
                 <form onSubmit={(e) => verifyOTP(e)}>
                     <div className="otp-form space-x-4">
@@ -130,7 +141,7 @@ const OTPField = ({ }: Props) => {
                     </div>
                     <div className="resend-otp">
                         <p>Didn't recieve OTP?</p>
-                        <div> Resend OTP </div>
+                        <button  onClick={(e) => resendOTPHandler(e)}> Resend OTP </button>
                     </div>
                     <button disabled={emptyCount === 0 ? false : true} className={`otp-button ${emptyCount === 0 ? 'otp-button-ok' : 'otp-button-disabled'}`} type="submit">{otp_length()}</button>
                 </form>

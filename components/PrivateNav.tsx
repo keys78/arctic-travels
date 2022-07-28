@@ -39,8 +39,8 @@ const PrivateNav = ({ setIsPasswordModal, isPasswordModal, userData }: modalProp
     }
 
     return (
-        <>
-            <div className='dash-area'>
+        <section className='dash-area-wrapper'>
+            <div className='dash-area '>
                 <div className="circle-wrapper">
                     <div className="success circle"></div>
                     <div className="icon">
@@ -83,7 +83,7 @@ const PrivateNav = ({ setIsPasswordModal, isPasswordModal, userData }: modalProp
                     </div>
                 </section>
             }
-        </>
+        </section>
     )
 }
 
