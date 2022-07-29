@@ -71,7 +71,7 @@ export const resendOTP = createAsyncThunk(
   }
 )
 
-// delete user
+// verify 2FA
 export const verify2FA = createAsyncThunk(
   '/verify2FA',
   async (obj, thunkAPI) => {
@@ -128,6 +128,7 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.message = "login successful"
         state.user = action.payload
       }) 
       .addCase(login.rejected, (state, action) => {
@@ -147,7 +148,7 @@ export const authSlice = createSlice({
       .addCase(verify2FA.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = 'invalid token'
       })
       .addCase(resendOTP.pending, (state) => {
         state.isLoading = true

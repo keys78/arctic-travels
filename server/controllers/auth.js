@@ -185,18 +185,30 @@ exports.verifyOTP = async (req, res, next) => {
 
     try {
         if (!user) return res.status(400).send({ message: "invalid user" });
-
-        if (otp !== user.OTP_code) {
-            return next(new ErrorResponse('invalid token, please try again', 400))
+        console.log(user.updatedAt)
+        console.log(Date.now())
+        if(user.updatedAt < Date.now()) {
+            console.log('yes')
+        } else {
+            console.log('no')
         }
+        
 
-        user.OTP_code = null
-        await user.save();
+        // if (otp !== user.OTP_code) {
+        //     return next(new ErrorResponse('invalid token, please try again', 400))
+        // }
+
+        // user.OTP_code = null
+        // await user.save();
         // return res.json({ success: true, message: `login success`, status: 201 })
-        sendToken(user, 200, res);
+
+        if (otp === user.OTP_code) {
+            return sendToken(user, 200, res);
+        }
+        
 
     } catch (error) {
-        return next(new ErrorResponse('Internal Server', 500))
+        return next(new ErrorResponse('Internal Server', 500)) 
 
     }
 };

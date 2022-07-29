@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Input from '../components/Input'
 import Image from 'next/image';
 import { CaretCircleLeft } from 'phosphor-react'
@@ -27,6 +27,7 @@ const signin = () => {
     password: "",
     confirmPassword: "",
   };
+
   const [values, setValues] = useState(initialValues);
   const onHandleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -51,7 +52,6 @@ const signin = () => {
       router.push('/dashboard')
     }
 
-    console.log('user', user)
 
     dispatch(reset())
   }, [user, isError, isSuccess, message, router, dispatch])
@@ -72,7 +72,6 @@ const signin = () => {
       }
 
       setValues(prev => initialValues)
-
     }
   }
 
@@ -81,6 +80,7 @@ const signin = () => {
 
     const userData = { ...values, }
     dispatch(login(userData))
+    handleStart()
 
     if (isError) {
       alert(message)
@@ -89,18 +89,56 @@ const signin = () => {
     setValues(prev => initialValues)
   }
 
-
-
-
   const loader = () => {
     return (
       <Image
         src="/loading.gif"
-        alt="Picture of the author"
+        alt="..."
         width={500}
         height={500}
       />
     )
+  }
+
+
+  const STATUS = { STARTED: 'Started', STOPPED: 'Stopped', }
+  const INITIAL_COUNT = 10
+  const [secondsRemaining, setSecondsRemaining] = useState(INITIAL_COUNT)
+  const [status, setStatus] = useState(STATUS.STOPPED)
+  const handleStart = () => { setStatus(STATUS.STARTED) }
+  const handleReset = () => {
+    setStatus(STATUS.STOPPED)
+    setSecondsRemaining(INITIAL_COUNT)
+  }
+
+  useInterval(
+    () => {
+      if (secondsRemaining > 0) {
+        setSecondsRemaining(secondsRemaining - 1)
+      } else {
+        setStatus(STATUS.STOPPED)
+      }
+    },
+    status === STATUS.STARTED ? 1000 : null
+  )
+
+
+  function useInterval(callback: any, delay: any) {
+    const savedCallback = useRef()
+
+    useEffect(() => {
+      savedCallback.current = callback
+    }, [callback])
+
+    useEffect(() => {
+      function tick() {
+        savedCallback.current()
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay)
+        return () => clearInterval(id)
+      }
+    }, [delay])
   }
 
 
@@ -154,8 +192,20 @@ const signin = () => {
           </div>
         </div>
       </motion.div>
-      {user && user.otpStatus === "on" && isOtpModal && <OTPField isOtpModal={isOtpModal} setIsOtpModal={setIsOtpModal}/>}
-      {/* {<OTPField />} */}
+      {user && user.otpStatus === "on" &&
+        isOtpModal &&
+        <OTPField
+          isOtpModal={isOtpModal}
+          setIsOtpModal={setIsOtpModal}
+          handleStart={handleStart}
+          secondsRemaining={secondsRemaining}
+          setSecondsRemaining={setSecondsRemaining}
+          isError={isError}
+          isSuccess={isSuccess}
+        />
+      }
+
+      {/* {<OTPField handleStart={handleStart} secondsRemaining={secondsRemaining} setSecondsRemaining={setSecondsRemaining} handleReset={handleReset} isError={isError} isSuccess={isSuccess} />} */}
 
     </section>
   )

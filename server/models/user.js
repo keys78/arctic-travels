@@ -2,17 +2,17 @@ const crypto = require("crypto")
 const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const _ = require('lodash'); 
 
 
 const UserSchema = new mongoose.Schema({
-    // _id:{ String },
     role: {
         type: String,
         default: "user",
         enum: ["user", "admin"]
     },
 
-    username: { type: String, toUpperCase: true, required: [true, "Please provide a username"], trim: true },
+    username: { type: String, required: [true, "Please provide a username"], trim: true },
 
     email: {
         type: String,
@@ -24,9 +24,9 @@ const UserSchema = new mongoose.Schema({
     },
 
     verified: { type: Boolean, default: false },
-    two_fa_status: {type: String, default: 'off'},
+    two_fa_status: { type: String, default: 'off' },
 
-    OTP_code: { type: String},
+    OTP_code: { type: String },
 
     password: {
         type: String,
@@ -38,9 +38,13 @@ const UserSchema = new mongoose.Schema({
     resetPasswordExpire: Date,
 
 },
-    { timestamps: true });
+    { timestamps: true }
+);
 
-
+UserSchema.pre('save', function (next) {
+    this.username = _.capitalize(this.username)
+    next();
+});
 
 
 UserSchema.pre("save", async function (next) {
@@ -51,11 +55,6 @@ UserSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
-
-UserSchema.pre('save', async function (next) {
-    this.username.charAt(0).toUpperCase() + this.username.slice(1);
-    next();
-  });
 
 UserSchema.methods.getSignedToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: '1d' })

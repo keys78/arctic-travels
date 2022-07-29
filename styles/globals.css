@@ -414,8 +414,10 @@ input:-webkit-autofill:active  { -webkit-box-shadow: 0 0 0 30px white inset !imp
 form .otp-form > div { margin:0 auto; width: 100%; text-align: center;}
 .otp-form { display: flex; width: 100%; margin: 0 auto; max-width: 400px; margin: 0 auto; }
 .resend-otp > p { margin-top: 30px; font-size: 13px; font-style: italic;} 
-.resend-otp > button { text-decoration: underline; margin-bottom: 30px; cursor: pointer; transition: 0.4s; color: inherit;} 
-.resend-otp > button:hover { transition: 0.4s; color: #307ae8; letter-spacing: 2px;} 
+.resend-cta { text-decoration: underline; margin-bottom: 30px;  transition: 0.4s; color: inherit;} 
+.resend-cta:hover { transition: 0.4s; color: #307ae8; letter-spacing: 2px; cursor: pointer;} 
+.resend-disabled { cursor: not-allowed; color: rgb(160, 160, 160); transition: 0.4s;}
+.resend-disabled:hover { cursor: not-allowed; transition: 0.4s;}
 .otp-button { width: 100%; max-width: 400px; transition: 0.4s; padding: 12px 0;  color:var(--white); margin-bottom: 40px; border-radius: 8px;}
 .otp-button-ok:hover { background: var(--primaryBlue) !important;  transition: 0.4s;}
 
@@ -426,7 +428,7 @@ form .otp-form > div { margin:0 auto; width: 100%; text-align: center;}
 .auth-gen-wrap { max-width: 850px; margin: 0 auto; position: relative;}
 .close-cta-btn { position: absolute; top: 50px; left: 15px; cursor: pointer;}
 
-
+.countdown-wrapper {box-shadow: #000000a3;  box-shadow: #3d76fb26 1.95px 1.95px 2.6px; border-radius: 4px; margin: 13px 0 20px 0; padding: 5px 0;}
 
 
 
@@ -524,7 +526,7 @@ input:checked + .slider:before { transform: translateX(26px);}
 .logout {margin: 16px auto 6px auto; background:#24243e; transition: 0.4s; display: flex; align-items: center; justify-content: center; padding: 4px 12px; max-width: 130px; border-radius: 4px; color:#fff; column-gap: 8px; cursor: pointer;  font-family: 'Lobster', cursive; font-size: 18px;}
 .logout:hover { background: #000; transition: 0.4s;}
 
-.password-confirm-modal {position: fixed; top: 0; left: 0; height: 100vh; width: 100%; background: #000000a3; display: flex; align-items: center; justify-content: center;}
+.password-confirm-modal {position: fixed; top: 0; left: 0; height: 100vh; width: 100%; background: #000000a3; display: flex; align-items: center; justify-content: center; z-index: 99999999;}
 .password-confirm-modal > form {position: relative; background-color: #fff; padding: 30px 12px 20px 12px; margin: -340px 0 12px 12px; border-radius: 6px; max-width: 350px; width: 100%; height: auto !important; display: block !important;}
 .password-confirm-modal form .close-modal-p  {position: absolute; top: 5px; right: 5px; cursor: pointer;}
 
