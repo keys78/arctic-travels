@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { activate2FA, deActivate2FA } from '../../features/private/privateSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Input from '../../components/Input'
 import { useOnClickOutside } from 'usehooks-ts'
 import { XCircle } from 'phosphor-react'
+import { toast } from 'react-toastify'
 
 
 
@@ -28,19 +29,16 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
             [name]: value,
         })
     };
-
+    const {  isLoading, isError, message } = useSelector((state: any) => state.private)
 
     useEffect(() => {
         const hour = new Date().getHours();
         const welcomeTypes = ["Good morning", "Good afternoon", "Good evening"];
         let welcomeText = "";
-
         if (hour < 12) welcomeText = welcomeTypes[0];
         else if (hour < 16) welcomeText = welcomeTypes[1];
         else welcomeText = welcomeTypes[2];
-
         setGreetings(welcomeText)
-
     }, []);
 
 
@@ -54,6 +52,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
         const thunkData = { id: userData._id, password: value.password }
         { userData.two_fa_status === "off" && dispatch(activate2FA(thunkData)) }
         { userData.two_fa_status === "on" && dispatch(deActivate2FA(thunkData)) }
+        // toast(message)
         setValue(prev => initialValues)
         setIsPasswordModal(val => !isPasswordModal)
 

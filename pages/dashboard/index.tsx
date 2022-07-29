@@ -6,6 +6,7 @@ import PrivateNav from '../../components/PrivateNav'
 import UserInfo from './UserInfo'
 import ForAdmin from './ForAdmin'
 import Loader from '../../components/Loader'
+import { toast } from 'react-toastify'
 
 
 
@@ -23,7 +24,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log(message)
+      toast(message)
     }
 
     if (!user && (user && !user.token)) {

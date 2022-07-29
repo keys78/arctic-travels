@@ -5,15 +5,20 @@ import { verify2FA, resendOTP, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 import { XCircle } from 'phosphor-react'
 
-interface Props { 
+interface Props {
     isOtpModal: any,
     setIsOtpModal: any
- }
+    handleStart: any,
+    secondsRemaining: number,
+    setSecondsRemaining: any,
+    isError: boolean,
+    isSuccess: boolean
+}
 
 
 let currentOTPIndex: number = 0
 
-const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
+const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, setSecondsRemaining, isError: iserror, isSuccess }: Props) => {
     const router = useRouter()
     const dispatch = useDispatch()
     const [isLocked, setIsLocked] = useState(false)
@@ -22,8 +27,8 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
     const [activeOTPIndex, setActiveOTPIndex] = useState<number>(0);
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const {user, isSuccess, isError } = useSelector((state: any) => state.auth)
-
+    const { user, isError } = useSelector((state: any) => state.auth)
+    const [expirationTime, setExpirationTime] = useState(false)
 
 
     const handleOnChange = (
@@ -36,9 +41,7 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
         if (!value) setActiveOTPIndex(currentOTPIndex - 1)
         else setActiveOTPIndex(currentOTPIndex + 1)
 
-
         setOtp(newOTP)
-        console.log(otp)
     }
 
     const handleOnKeyDown = (
@@ -49,17 +52,9 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
         if (key === "Backspace") setActiveOTPIndex(currentOTPIndex - 1)
     }
 
-
     useEffect(() => {
         inputRef.current?.focus();
     }, [activeOTPIndex])
-
-    // useEffect(() => {
-         
-    //     dispatch(reset())
-    //   }, [user, isSuccess, router, dispatch])
-
-
 
     const emptyCount = otp.filter(val => val.length === 0).length;
     function otp_length() {
@@ -67,7 +62,7 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
         if (emptyCount === 1) return emptyCount + " " + `Digit left`
         if (emptyCount !== 0) return emptyCount + " " + `Digits left`
     }
-    
+
     const resendOTPHandler = (value: any) => {
         value.preventDefault();
 
@@ -75,9 +70,13 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
         const resendData = { id: user.id, userData: userData }
         dispatch(resendOTP(resendData))
 
-        if(!isError) {
-            toast.success(user.message, {autoClose: 2000})
+        if (!isError) {
+            toast.success(user.message, { autoClose: 2000 })
         }
+
+        setSecondsRemaining(10)
+        setExpirationTime(false)
+        handleStart()
 
     }
 
@@ -91,30 +90,43 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
         const verifyData = { id: user.id, otp: otpx }
         dispatch(verify2FA(verifyData))
 
-     
-       
-       
+        setIsLocked(isLocked)
+        setAnimate(true)
+
+        setTimeout(() => {
+            setAnimate(false)
+        }, 500)
 
 
+        // fun animation
         // const allEqual = otp.every(v => v === otp[0])
         // if (allEqual === true) return setIsLocked(!isLocked)
         // else setIsLocked(false)
         // setAnimate(true)
-
         // setTimeout(() => {
         //     setAnimate(false)
         // }, 1000)
     }
 
-   
+    const secondsToDisplay = secondsRemaining % 60
+
+    useEffect(() => {
+
+        secondsRemaining === 0 && setExpirationTime(!expirationTime)
+
+    }, [secondsRemaining])
+
+    const twoDigits = (num: number) => String(num).padStart(2, '0')
+
+
 
 
 
     return (
         <div className="otp-wrapper">
-           
+
             <div className="otp-container relative">
-            <button className="absolute top-2 right-2" onClick={() =>setIsOtpModal(!isOtpModal)}><XCircle size={20} color="#e71818" weight="thin" /></button>
+                <button className="absolute top-2 right-2" onClick={() => setIsOtpModal(!isOtpModal)}><XCircle size={20} color="#e71818" weight="thin" /></button>
                 <div className={`container-lock ${!isLocked ? 'otp-null' : 'unlocked otp-success'}`}>
                     <span className={`lock ${!isLocked ? (animate && 'lock-shake') : 'unlocked'}`}></span>
                 </div>
@@ -141,7 +153,10 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
                     </div>
                     <div className="resend-otp">
                         <p>Didn't recieve OTP?</p>
-                        <button  onClick={(e) => resendOTPHandler(e)}> Resend OTP </button>
+                        <button
+                            className={`${expirationTime ? "resend-cta" : "resend-disabled"}`}
+                            disabled={!expirationTime} onClick={(e) => resendOTPHandler(e)}> Resend OTP </button>
+                        <div className="countdown-wrapper">in <span className={`${expirationTime ? "text-green-500" : "text-red-500"}`}>{twoDigits(secondsToDisplay)}</span> </div>
                     </div>
                     <button disabled={emptyCount === 0 ? false : true} className={`otp-button ${emptyCount === 0 ? 'otp-button-ok' : 'otp-button-disabled'}`} type="submit">{otp_length()}</button>
                 </form>
@@ -149,6 +164,9 @@ const OTPField = ({isOtpModal, setIsOtpModal }: Props) => {
         </div>
     );
 };
+
+
+
 
 
 export default OTPField;

@@ -18,15 +18,12 @@ const login = async (userData) => {
   if (data.token) {
     localStorage.setItem('authToken', JSON.stringify(data))
   }
-
-  console.log(data)
   return data
 }
 
 const resendOTP = async (id, userData) => {
   const {data} = await axios.post(`${AUTH_API_URL + `resend-otp/${id}`}`, userData)
- 
-  console.log(data)
+
   return data
 }
 
@@ -37,8 +34,6 @@ const verify2FA = async (id, userData) => {
   if (data.success === true) {
     localStorage.setItem('authToken', JSON.stringify(data.token))
   }
-
-  console.log(data)
   return data
 }
 

@@ -119,12 +119,12 @@ export const privateSlice = createSlice({
       .addCase(deActivate2FA.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.user.two_fa_status = action.payload.status
-        state.message = action.payload.message
+        state.message = "2FA deactivated successfully"
       })
       .addCase(deActivate2FA.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
+        state.isSuccess = false
         state.message = action.payload
       })
   },

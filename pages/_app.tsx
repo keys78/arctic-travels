@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         </Provider>
       </AnimatePresence>
 
-      <ToastContainer />
+      <ToastContainer limit={2} />
     </div>
   )
 }
