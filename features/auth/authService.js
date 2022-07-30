@@ -6,6 +6,8 @@ const AUTH_API_URL = 'https://arctic-travels-api.herokuapp.com/auth/'
 
 const register = async (userData) => {
   const response = await axios.post(`${AUTH_API_URL + 'register'}`, userData)
+
+  console.log('response', response.data.message)
   return response.data.message
 } 
 
