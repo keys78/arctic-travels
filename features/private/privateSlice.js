@@ -39,7 +39,7 @@ export const getUser = createAsyncThunk(
 // activate 2FA
 export const activate2FA = createAsyncThunk(
   'private/activate2FA',
-  async (obj, thunkAPI) => {
+  async (obj, {}, thunkAPI) => {
     try {
       let password = { password: obj.password }
       const token = thunkAPI.getState().auth.user.token || token2
@@ -59,7 +59,7 @@ export const activate2FA = createAsyncThunk(
 // deactivate 2FA
 export const deActivate2FA = createAsyncThunk(
   'private/deactivate2FA',
-  async (obj, thunkAPI) => {
+  async (obj, {}, thunkAPI) => {
     try {
       let password = { password: obj.password }
       const token = thunkAPI.getState().auth.user.token || token2

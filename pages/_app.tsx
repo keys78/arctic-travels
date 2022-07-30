@@ -10,22 +10,21 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function MyApp({ Component, pageProps, router }: AppProps) {
+  const AnyComponent = Component as any;
+  
+  return<div className='layout'>
+  <AnimatePresence
+    exitBeforeEnter={true}
+    initial={false}
+    onExitComplete={() => window.scrollTo(0, 0)}
+  >
+    <Provider store={store} >
+    <AnyComponent {...pageProps} key={router.route} />
+    </Provider>
+  </AnimatePresence>
 
-  return (
-    <div className='layout'>
-      <AnimatePresence
-        exitBeforeEnter={true}
-        initial={false}
-        onExitComplete={() => window.scrollTo(0, 0)}
-      >
-        <Provider store={store} >
-        <Component {...pageProps} key={router.route} />
-        </Provider>
-      </AnimatePresence>
-
-      <ToastContainer limit={2} />
-    </div>
-  )
+  <ToastContainer limit={2} />
+</div>
 }
 
 export default MyApp

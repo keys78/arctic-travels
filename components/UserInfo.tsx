@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { activate2FA, deActivate2FA } from '../../features/private/privateSlice'
-// import { useDispatch, useSelector } from 'react-redux'
-import Input from '../../components/Input'
+import  { useState, useEffect, useRef } from 'react'
+import { activate2FA, deActivate2FA } from '../features/private/privateSlice'
+import Input from './Input'
 import { useOnClickOutside } from 'usehooks-ts'
 import { XCircle } from 'phosphor-react'
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch } from '../app/hooks'
 
 
 
@@ -14,10 +13,7 @@ interface modalProps {
     userData: any
 }
 
-
-
 const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps) => {
-    // const dispatch = useDispatch();
     const dispatch = useAppDispatch()
     const passwordConfirmRef = useRef(null)
     const [greetings, setGreetings] = useState('')
@@ -61,14 +57,14 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
     const renderPasswordConfirmModal = [
         <div className='password-confirm-modal'>
             <form ref={passwordConfirmRef} onSubmit={(e) => confirmPasswordFor2FA(e)}>
-                <span className='close-modal-p' onClick={() => setIsPasswordModal(prev => !isPasswordModal)}><XCircle size={26} color="#141f38" weight="thin" /></span>
+                <span className='close-modal-p' onClick={() => setIsPasswordModal(!isPasswordModal)}><XCircle size={26} color="#141f38" weight="thin" /></span>
                 <Input name={'password'} value={value.password} label='password' type='password' required={true} onHandleInputChange={(e: any) => onHandleInputChange(e)} />
                 <button className='btn-class-form new-btn'>Confirm</button>
             </form>
         </div>
     ]
 
-    return (
+    return userData && (
         <div className='data-spec'>
             <div className="photo-box shimmer">
                 <img src="https://source.unsplash.com/random/300x200"  />

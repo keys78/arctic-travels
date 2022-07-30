@@ -17,7 +17,7 @@ const initialState = {
 // Register user
 export const register = createAsyncThunk(
   'auth/register',
-  async (user, thunkAPI) => {
+  async (user, {}, thunkAPI) => {
     try {
       return await authService.register(user)
     } catch (error) {
@@ -36,7 +36,7 @@ export const register = createAsyncThunk(
 // login user
 export const login = createAsyncThunk(
   'auth/login',
-  async (user, thunkAPI) => {
+  async (user, {}, thunkAPI) => {
     try {
       return await authService.login(user)
     } catch (error) {
@@ -53,8 +53,9 @@ export const login = createAsyncThunk(
 )
 
 //resend OTP
-export const resendOTP = () => createAsyncThunk( 'auth/resend-otp', async (obj, thunkAPI) => { 
-  const {id, userData} = obj
+export const resendOTP = createAsyncThunk( 'auth/resend-otp', async (obj, {}, thunkAPI) => {
+
+    const {id, userData} = obj
     try {
       return await authService.resendOTP(id, userData)
     } catch (error) {
@@ -73,7 +74,7 @@ export const resendOTP = () => createAsyncThunk( 'auth/resend-otp', async (obj, 
 // verify 2FA
 export const verify2FA = createAsyncThunk(
   '/verify2FA',
-  async (obj, thunkAPI) => {
+  async (obj, {}, thunkAPI) => {
     try {
       return await authService.verify2FA(obj.id, obj.otp)
     } catch (error) {

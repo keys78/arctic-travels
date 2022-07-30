@@ -15,7 +15,6 @@ interface Props {
     setSecondsRemaining: any,
     isError: boolean,
     isSuccess: boolean,
-    resendOTP: () => void
 }
 
 
@@ -95,13 +94,6 @@ const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, se
         dispatch(verify2FA (verifyData))
 
 
-
-
-
-
-
-        
-
         setIsLocked(isLocked)
         setAnimate(true)
 
@@ -123,6 +115,7 @@ const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, se
     const secondsToDisplay = secondsRemaining % 60
 
     useEffect(() => {
+        handleStart()
 
         secondsRemaining === 0 && setExpirationTime(!expirationTime)
 

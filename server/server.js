@@ -25,8 +25,6 @@ app.get("/", (req, res) =>
   res.json({ success: true, message: "arctic-travels-api is running!" })
 );
 
-// app.use('api', fileRoutes.)
-// Error Handler ( Should be last piece of middleware)
 app.use(errorHandler);
 
 

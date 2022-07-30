@@ -53,7 +53,7 @@ export const getAllUnVerifiedUsers = createAsyncThunk(
 // delete user
 export const deleteUser = createAsyncThunk(
   '/admin/delete-user',
-  async (id, thunkAPI) => {
+  async (id, {}, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token || token2
       return await adminService.deleteUser(id, token)

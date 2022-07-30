@@ -78,7 +78,7 @@ const signin = () => {
 
 
   function useInterval(callback: any, delay: any) {
-    const savedCallback = useRef()
+    const savedCallback: any = {} = useRef()
 
     useEffect(() => {
       savedCallback.current = callback
@@ -120,7 +120,6 @@ const signin = () => {
 
     const userData = { ...values, }
     dispatch(login(userData))
-    handleStart()
 
     if (isError) {
       alert(message)
