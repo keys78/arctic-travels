@@ -5,9 +5,11 @@ import Tabs from '../../components/CustomTabs/Tabs'
 import { Trash } from 'phosphor-react'
 import { motion } from 'framer-motion'
 import { toast } from 'react-toastify'
+import { useAppDispatch } from '../../app/hooks'
 
 const ForAdmin = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+    const dispatch = useAppDispatch()
     const { verifiedUsers, unVerifiedUsers, isError, message } = useSelector((state: any) => state.admin)
 
     useEffect(() => {

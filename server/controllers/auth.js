@@ -10,7 +10,6 @@ const otpMessage = require('../utils/otpEmailTemplate')
 
 
 
-
 exports.register = async (userDetails, role, res, next) => {
 
     try {
@@ -25,19 +24,19 @@ exports.register = async (userDetails, role, res, next) => {
             ...userDetails, role
         });
 
-        // const token = await new Token({
-        //     userId: user._id,
-        //     token: crypto.randomBytes(32).toString("hex"),
-        // }).save();
+        const token = await new Token({
+            userId: user._id,
+            token: crypto.randomBytes(32).toString("hex"),
+        }).save();
 
-        // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
-       
+        const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-        // sendEmail({
-        //     to: user.email,
-        //     subject: "Email Verification",
-        //     text: confirmEmailMessage(url)
-        // });
+
+        sendEmail({
+            to: user.email,
+            subject: "Email Verification",
+            text: confirmEmailMessage(url)
+        });
 
         res.json({
             success: true, message: `Welcome ${user.username} to Arctic Travels, Please confirm the verification email sent to you.`, status: 201
@@ -72,18 +71,18 @@ exports.login = async (req, res, next) => {
 
 
         if (!user.verified) {
-            // const token = await new Token({
-            //     userId: user._id,
-            //     token: crypto.randomBytes(32).toString("hex"),
-            // }).save();
+            const token = await new Token({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString("hex"),
+            }).save();
 
-            // const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+            const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-            // sendEmail({
-            //     to: user.email,
-            //     subject: "Email Verification",
-            //     text: confirmEmailMessage(url)
-            // });
+            sendEmail({
+                to: user.email,
+                subject: "Email Verification",
+                text: confirmEmailMessage(url)
+            });
 
 
             return next(new ErrorResponse('please confirm the verification email sent to you.', 401))
@@ -100,18 +99,17 @@ exports.login = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            // sendEmail({
-            //     to: user.email,
-            //     subject: "One-Time Login Access",
-            //     text:otpMessage(otp, user)
-            // });
+            sendEmail({
+                to: user.email,
+                subject: "One-Time Login Access",
+                text:otpMessage(otp, user)
+            });
 
             await otp.remove();
 
-            return res.json({otp:otp.otp, success: false, otpStatus: user.two_fa_status, id: user._id })
+            return res.json({ otp: otp.otp, success: false, otpStatus: user.two_fa_status, id: user._id })
         }
 
-        // return res.json({ success: true, message: `login success`, status: 201 })
         sendToken(user, 200, res);
 
     } catch (error) {
@@ -121,7 +119,7 @@ exports.login = async (req, res, next) => {
 
 
 exports.resendOTP = async (req, res, next) => {
-    const {id} = req.params
+    const { id } = req.params
     const user = await User.findById(`${id}`);
 
     try {
@@ -135,15 +133,15 @@ exports.resendOTP = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            // sendEmail({
-            //     to: user.email,
-            //     subject: "One-Time Login Access",
-            //     text:otpMessage(otp, user)
-            // });
+            sendEmail({
+                to: user.email,
+                subject: "One-Time Login Access",
+                text:otpMessage(otp, user)
+            });
 
             await otp.remove();
 
-            return res.json({message: 'one-time login has been sent your email', otpStatus: user.two_fa_status,})
+            return res.json({ message: 'one-time login has been sent your email', otpStatus: user.two_fa_status, })
         }
         return res.json(user)
 
@@ -185,30 +183,29 @@ exports.verifyOTP = async (req, res, next) => {
 
     try {
         if (!user) return res.status(400).send({ message: "invalid user" });
-        console.log(user.updatedAt)
-        console.log(Date.now())
-        if(user.updatedAt < Date.now()) {
+
+        const lastUpdatedTime = new Date(user.updatedAt);
+        lastUpdatedTime.setMinutes(lastUpdatedTime.getMinutes() + 5);
+        const currentTime = (new Date(Date.now()))
+
+
+        if (lastUpdatedTime <= currentTime) {
             console.log('yes')
-        } else {
-            console.log('no')
+            user.OTP_code = null
+            await user.save();
         }
-        
 
-        // if (otp !== user.OTP_code) {
-        //     return next(new ErrorResponse('invalid token, please try again', 400))
-        // }
-
-        // user.OTP_code = null
-        // await user.save();
-        // return res.json({ success: true, message: `login success`, status: 201 })
-
-        if (otp === user.OTP_code) {
-            return sendToken(user, 200, res);
+        if (otp !== user.OTP_code) {
+            return next(new ErrorResponse('invalid token, please try again', 400))
         }
-        
+
+        user.OTP_code = null
+        await user.save();
+        return sendToken(user, 200, res);
+
 
     } catch (error) {
-        return next(new ErrorResponse('Internal Server', 500)) 
+        return next(new ErrorResponse('Internal Server', 500))
 
     }
 };

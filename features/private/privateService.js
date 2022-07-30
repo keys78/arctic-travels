@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const PRIVATE_API_URL = 'http://localhost:4000/private/'
+// const PRIVATE_API_URL = 'http://localhost:4000/private/' //local
+const PRIVATE_API_URL = 'https://arctic-travels-api.herokuapp.com/private/' 
 
 
 // Get user

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { verify2FA, resendOTP, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 import { XCircle } from 'phosphor-react'
+import { useAppDispatch } from '../app/hooks'
+
 
 interface Props {
     isOtpModal: any,
@@ -12,15 +14,17 @@ interface Props {
     secondsRemaining: number,
     setSecondsRemaining: any,
     isError: boolean,
-    isSuccess: boolean
+    isSuccess: boolean,
+    resendOTP: () => void
 }
 
 
 let currentOTPIndex: number = 0
 
-const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, setSecondsRemaining, isError: iserror, isSuccess }: Props) => {
+const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, setSecondsRemaining }: Props) => {
     const router = useRouter()
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const [isLocked, setIsLocked] = useState(false)
     const [animate, setAnimate] = useState(false)
     const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
@@ -86,9 +90,17 @@ const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, se
 
         const formatOTP = otp.join('')
         const otpx = { otp: `${formatOTP}` }
-
         const verifyData = { id: user.id, otp: otpx }
-        dispatch(verify2FA(verifyData))
+
+        dispatch(verify2FA (verifyData))
+
+
+
+
+
+
+
+        
 
         setIsLocked(isLocked)
         setAnimate(true)
@@ -136,7 +148,7 @@ const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, se
                 </div>
                 <form onSubmit={(e) => verifyOTP(e)}>
                     <div className="otp-form space-x-4">
-                        {otp.map((_, index) => {
+                        {otp.map((_:any, index:any) => {
                             return (
                                 <div key={index}>
                                     <input
@@ -164,6 +176,7 @@ const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, se
         </div>
     );
 };
+
 
 
 

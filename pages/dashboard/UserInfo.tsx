@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { activate2FA, deActivate2FA } from '../../features/private/privateSlice'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 import Input from '../../components/Input'
 import { useOnClickOutside } from 'usehooks-ts'
 import { XCircle } from 'phosphor-react'
-import { toast } from 'react-toastify'
+import { useAppDispatch } from '../../app/hooks'
 
 
 
@@ -17,7 +17,8 @@ interface modalProps {
 
 
 const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+    const dispatch = useAppDispatch()
     const passwordConfirmRef = useRef(null)
     const [greetings, setGreetings] = useState('')
     const initialValues = { password: "", };
@@ -29,7 +30,6 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
             [name]: value,
         })
     };
-    const {  isLoading, isError, message } = useSelector((state: any) => state.private)
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -43,7 +43,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
 
 
 
-    const handleClickOutside = () => { setIsPasswordModal(prev => !isPasswordModal) }
+    const handleClickOutside = () => { setIsPasswordModal(!isPasswordModal) }
     useOnClickOutside(passwordConfirmRef, handleClickOutside)
 
 
@@ -52,9 +52,9 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
         const thunkData = { id: userData._id, password: value.password }
         { userData.two_fa_status === "off" && dispatch(activate2FA(thunkData)) }
         { userData.two_fa_status === "on" && dispatch(deActivate2FA(thunkData)) }
-        // toast(message)
+        
         setValue(prev => initialValues)
-        setIsPasswordModal(val => !isPasswordModal)
+        setIsPasswordModal(!isPasswordModal)
 
     }
 

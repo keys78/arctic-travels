@@ -10,12 +10,14 @@ import { register, login, reset } from '../features/auth/authSlice';
 import OTPField from '../components/OTP_popup';
 import { toast } from 'react-toastify'
 import Loader from '../components/Loader';
+import { useAppDispatch } from '../app/hooks';
 
 
 
 const signin = () => {
   const router = useRouter()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [activePanel, setActivePanel] = useState(true)
   const [isOtpModal, setIsOtpModal] = useState(false)
   const { user, isLoading, isError, isSuccess, message } = useSelector((state: any) => state.auth)
@@ -55,6 +57,44 @@ const signin = () => {
 
     dispatch(reset())
   }, [user, isError, isSuccess, message, router, dispatch])
+
+
+  const STATUS = { STARTED: 'Started', STOPPED: 'Stopped', }
+  const INITIAL_COUNT = 10
+  const [secondsRemaining, setSecondsRemaining] = useState(INITIAL_COUNT)
+  const [status, setStatus] = useState(STATUS.STOPPED)
+  const handleStart = () => { setStatus(STATUS.STARTED) }
+
+  useInterval(
+    () => {
+      if (secondsRemaining > 0) {
+        setSecondsRemaining(secondsRemaining - 1)
+      } else {
+        setStatus(STATUS.STOPPED)
+      }
+    },
+    status === STATUS.STARTED ? 1000 : null
+  )
+
+
+  function useInterval(callback: any, delay: any) {
+    const savedCallback = useRef()
+
+    useEffect(() => {
+      savedCallback.current = callback
+    }, [callback])
+
+    useEffect(() => {
+      function tick() {
+        savedCallback.current()
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay)
+        return () => clearInterval(id)
+      }
+    }, [delay])
+  }
+
 
 
   const registerUsers = async (value: any) => {
@@ -101,45 +141,6 @@ const signin = () => {
   }
 
 
-  const STATUS = { STARTED: 'Started', STOPPED: 'Stopped', }
-  const INITIAL_COUNT = 10
-  const [secondsRemaining, setSecondsRemaining] = useState(INITIAL_COUNT)
-  const [status, setStatus] = useState(STATUS.STOPPED)
-  const handleStart = () => { setStatus(STATUS.STARTED) }
-  const handleReset = () => {
-    setStatus(STATUS.STOPPED)
-    setSecondsRemaining(INITIAL_COUNT)
-  }
-
-  useInterval(
-    () => {
-      if (secondsRemaining > 0) {
-        setSecondsRemaining(secondsRemaining - 1)
-      } else {
-        setStatus(STATUS.STOPPED)
-      }
-    },
-    status === STATUS.STARTED ? 1000 : null
-  )
-
-
-  function useInterval(callback: any, delay: any) {
-    const savedCallback = useRef()
-
-    useEffect(() => {
-      savedCallback.current = callback
-    }, [callback])
-
-    useEffect(() => {
-      function tick() {
-        savedCallback.current()
-      }
-      if (delay !== null) {
-        let id = setInterval(tick, delay)
-        return () => clearInterval(id)
-      }
-    }, [delay])
-  }
 
 
   return (
@@ -204,9 +205,6 @@ const signin = () => {
           isSuccess={isSuccess}
         />
       }
-
-      {/* {<OTPField handleStart={handleStart} secondsRemaining={secondsRemaining} setSecondsRemaining={setSecondsRemaining} handleReset={handleReset} isError={isError} isSuccess={isSuccess} />} */}
-
     </section>
   )
 }

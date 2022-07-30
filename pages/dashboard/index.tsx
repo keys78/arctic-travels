@@ -7,12 +7,14 @@ import UserInfo from './UserInfo'
 import ForAdmin from './ForAdmin'
 import Loader from '../../components/Loader'
 import { toast } from 'react-toastify'
+import { useAppDispatch } from '../../app/hooks'
 
 
 
 
 const Dashboard = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const [isPasswordModal, setIsPasswordModal] = useState(false)
   const { user } = useSelector((state: any) => state.auth)

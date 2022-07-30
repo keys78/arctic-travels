@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react'
 import { User, GlobeStand, SignOut } from 'phosphor-react'
 import { logout, reset } from '../features/auth/authSlice'
 import { resetUser } from '../features/private/privateSlice'
-import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useOnClickOutside } from 'usehooks-ts'
+import { useAppDispatch } from '../app/hooks'
 
 interface modalProps {
     setIsPasswordModal: any
@@ -15,7 +15,8 @@ interface modalProps {
 const PrivateNav = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps) => {
     const [showDrop, setShowDrop] = useState(false)
     const [isModal, setIsModal] = useState(false)
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const router = useRouter()
     const modalRef = useRef(null)
     const userRef = useRef(null)
@@ -28,7 +29,7 @@ const PrivateNav = ({ setIsPasswordModal, isPasswordModal, userData }: modalProp
 
 
     const handleToggleIs2FA = () => {
-        setIsPasswordModal(val => !isPasswordModal)
+        setIsPasswordModal(!isPasswordModal)
     }
 
     const onLogout = () => {

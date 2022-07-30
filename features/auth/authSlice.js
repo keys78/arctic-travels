@@ -53,11 +53,10 @@ export const login = createAsyncThunk(
 )
 
 //resend OTP
-export const resendOTP = createAsyncThunk(
-  'auth/resend-otp',
-  async (obj, thunkAPI) => {
+export const resendOTP = () => createAsyncThunk( 'auth/resend-otp', async (obj, thunkAPI) => { 
+  const {id, userData} = obj
     try {
-      return await authService.resendOTP(obj.id, obj.userData)
+      return await authService.resendOTP(id, userData)
     } catch (error) {
       const message =
         error.response.data.error ||

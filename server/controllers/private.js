@@ -43,6 +43,57 @@ exports.getAllVerifiedUsers = async (req, res, next) => {
     }
 };
 
+
+exports.activate2FA = async (req, res, next) => {
+    const { password } = req.body;
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById({ _id: id }).select('+password');
+
+        if (!user) {
+            return next(new ErrorResponse("User not found", 400))
+        }
+
+        const isMatch = await user.matchPasswords(password);
+        if (!isMatch) {
+            return next(new ErrorResponse("shey you dey whyne me ni ..? enter correct password o jhare", 400))
+        }
+        user.two_fa_status = "on"
+        await user.save();
+
+        return res.json({ status: user.two_fa_status, message: '2FA activation was successful' });
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.deactivate2FA = async (req, res, next) => {
+    const { password } = req.body;
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById({ _id: id }).select('+password');
+
+        if (!user) {
+            return next(new ErrorResponse("User not found", 400))
+        }
+
+        const isMatch = await user.matchPasswords(password);
+        if (!isMatch) {
+            return next(new ErrorResponse("shey you dey whyne me ni ..? enter correct password o jhare", 400))
+        }
+        user.two_fa_status = "off"
+        await user.save();
+
+        return res.json({ status: user.two_fa_status, message: '2FA de-activation was successful' });
+       
+    } catch (error) {
+        next(error)
+    }
+};
+
 exports.deleteUser = async (req, res, next) => {
 
     const user = await User.findOneAndRemove({ _id: req.params.id })
@@ -71,55 +122,3 @@ exports.deleteUser = async (req, res, next) => {
     }
 
 }
-
-
-
-exports.activate2FA = async (req, res, next) => {
-    const { password } = req.body;
-    const { id } = req.params;
-
-    try {
-        const user = await User.findById({ _id: id }).select('+password');
-
-        if (!user) {
-            return next(new ErrorResponse("User not found", 400))
-        }
-
-        const isMatch = await user.matchPasswords(password);
-        if (!isMatch) {
-            return next(new ErrorResponse("shey you dey whyne me ni ..? enter correct password jhare", 400))
-        }
-        user.two_fa_status = "on"
-        await user.save();
-
-        return res.json({ status: user.two_fa_status, message: '2FA activation was successful' });
-        // return res.json({ data: '2FA activation was successful' });
-    } catch (error) {
-        next(error)
-    }
-};
-
-exports.deactivate2FA = async (req, res, next) => {
-    const { password } = req.body;
-    const { id } = req.params;
-
-    try {
-        const user = await User.findById({ _id: id }).select('+password');
-
-        if (!user) {
-            return next(new ErrorResponse("User not found", 400))
-        }
-
-        const isMatch = await user.matchPasswords(password);
-        if (!isMatch) {
-            return next(new ErrorResponse("shey you dey whyne me ni ..? enter correct password o jhare", 400))
-        }
-        user.two_fa_status = "off"
-        await user.save();
-
-        return res.json({ status: user.two_fa_status, message: '2FA de-activation was successful' });
-        // return res.json({ data: '2FA de-activation was successful' });
-    } catch (error) {
-        next(error)
-    }
-};

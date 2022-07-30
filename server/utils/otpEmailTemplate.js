@@ -49,6 +49,14 @@ const otpMessage = (otp, user) => `
                                                 <span style="font-weight:bold;">${otp.otp}
                                                 </span>
                                             </div>
+                                            <div>&nbsp;</div>
+
+                                            <div
+                                                style="font-size: 16px; line-height:1.4; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #082446;">
+                                                Note that this code is only valid for  
+                                                <span style="font-weight:bold;">5</span>
+                                                minutes.
+                                            </div>
 
                                             <div>&nbsp;</div>
 
