@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 router.route('/user').get(protect, getUser);
-router.route("/activate2FA/:id").post( activate2FA)
+router.route("/activate2FA/:id").post(protect, activate2FA)
 router.route("/deactivate2FA/:id").post(protect, deactivate2FA)
 
 router.route('/admin/all-verified-users').get(protect, isAdmin, getAllVerifiedUsers);

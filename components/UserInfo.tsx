@@ -64,7 +64,7 @@ const UserInfo = ({ setIsPasswordModal, isPasswordModal, userData }: modalProps)
         </div>
     ]
 
-    return userData && (
+    return  (
         <div className='data-spec'>
             <div className="photo-box shimmer">
                 <img src="https://source.unsplash.com/random/300x200"  />
