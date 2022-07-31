@@ -77,7 +77,7 @@ const OTPField = ({ isOtpModal, setIsOtpModal, handleStart, secondsRemaining, se
             toast.success(user.message, { autoClose: 2000 })
         }
 
-        setSecondsRemaining(10)
+        setSecondsRemaining(60)
         setExpirationTime(false)
         handleStart()
 
