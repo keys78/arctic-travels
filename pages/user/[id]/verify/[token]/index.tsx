@@ -58,12 +58,12 @@ const users = () => {
 		</div>
 	]
 
-	return router.isReady && !isLoading ? (
+	return  (
 		<>
 			{validUrl && successMessage}
 			{!validUrl && notFound}
 		</>
-	) : <Loader />
+	) 
 };
 
 export default users;
