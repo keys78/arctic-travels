@@ -67,9 +67,9 @@ const ForAdmin = () => {
     return (
         <div className='data-users'>
             <Tabs>
-                <span className="tab-alone" title="Verified">{renderVerified}</span>
-                <span title="Unverified">{renderUnVerified}</span>
-                <span title="All Users">{renderAllUsers}</span>
+                <span className="tab-alone" title={`Verified (${renderVerified.length})`}>{renderVerified}</span>
+                <span title={`Unverified (${renderUnVerified.length})`}>{renderUnVerified}</span>
+                <span title={`All Users (${renderAllUsers.length})`}>{renderAllUsers}</span>
             </Tabs>
         </div>
     )

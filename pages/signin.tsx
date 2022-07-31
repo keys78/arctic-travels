@@ -5,7 +5,7 @@ import { CaretCircleLeft } from 'phosphor-react'
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { variants } from '../utils/data';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { register, login, reset } from '../features/auth/authSlice';
 import OTPField from '../components/OTP_popup';
 import { toast } from 'react-toastify'
@@ -16,7 +16,6 @@ import { useAppDispatch } from '../app/hooks';
 
 const signin = () => {
   const router = useRouter()
-  // const dispatch = useDispatch()
   const dispatch = useAppDispatch()
   const [activePanel, setActivePanel] = useState(true)
   const [isOtpModal, setIsOtpModal] = useState(false)
@@ -60,7 +59,7 @@ const signin = () => {
 
 
   const STATUS = { STARTED: 'Started', STOPPED: 'Stopped', }
-  const INITIAL_COUNT = 10
+  const INITIAL_COUNT = 60
   const [secondsRemaining, setSecondsRemaining] = useState(INITIAL_COUNT)
   const [status, setStatus] = useState(STATUS.STOPPED)
   const handleStart = () => { setStatus(STATUS.STARTED) }
