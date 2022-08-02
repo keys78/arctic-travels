@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-
 function MyApp({ Component, pageProps, router }: AppProps) {
   const AnyComponent = Component as any;
   
