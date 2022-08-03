@@ -75,8 +75,11 @@ exports.login = async (req, res, next) => {
                 userId: user._id,
             });
 
-            await unusedToken.remove();
+            if(unusedToken !== null) {
+                await unusedToken.remove();
+            }
 
+            
             const token = await new Token({
                 userId: user._id,
                 token: crypto.randomBytes(32).toString("hex"),
