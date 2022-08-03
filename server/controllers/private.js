@@ -106,7 +106,7 @@ exports.deleteUser = async (req, res, next) => {
         if (!user.verified) {
             const token = await Token.findOne({
                 userId: user._id,
-            });
+            }); 
 
             if (!token) {
                 return res.json({ id: user._id, message: "no token, account has been deleted" });

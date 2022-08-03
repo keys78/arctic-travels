@@ -46,7 +46,7 @@ const signin = () => {
     }
 
     if (!isError) {
-      toast.success(user, { autoClose: 20000 });
+      toast.success(user, { autoClose: false });
     }
 
     if (user && user.token) {
