@@ -120,7 +120,7 @@ html { scroll-behavior: smooth;}
 .select-box-wrapper { position: relative; width: 160px; font-size: 13px;}
 .select-box-container {width: 100%; border: 1px solid cyan; padding: 9px 9px 9px 23px; display: flex; border-radius: 10px; align-items: center; justify-content: space-between; cursor: pointer;}
 .select-box-container > h5 { color: #838383 !important; font-weight: 500 ;}
-.select-dropdown { border: 0.5px solid var(--border-group); background: #fff; position: absolute; width: 100%; box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);}
+.select-dropdown { border: 0.5px solid var(--border-group); background: #fff; position: absolute; width: 100%; box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08); z-index: 9999;}
 .select-dropdown > h5 { padding:2px 15px 6px 23px; text-align: left !important; transition: all .2s ease-in-out; color: #838383 ; cursor: pointer; font-weight: normal ; transition: 0.4s;}
 .select-dropdown > h5:hover { letter-spacing: 2px; transition: 0.4s;}
 .select-dropdown > h5:nth-child(even) { background: #f3f3f3;}
