@@ -179,7 +179,6 @@ exports.verifyEmail = async (req, res, next) => {
 
         res.json({ success: true, message: `Email Verified Successfully`, status: 202 })
 
-
     } catch (error) {
         return next(new ErrorResponse('Internal Server Error kiil am', 500))
 
@@ -225,11 +224,3 @@ const sendToken = (user, statusCode, res) => {
     const token = user.getSignedToken();
     res.status(statusCode).json({ success: true, data: user.username, token })
 }
-
-
-
-
-
-
-
-

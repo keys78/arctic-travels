@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { getAllUnVerifiedUsers, getAllVerifiedUsers, deleteUser, resetUsers } from '../../features/admin/adminSlice'
 import Tabs from '../../components/CustomTabs/Tabs'
 import { Trash } from 'phosphor-react'
 import { motion } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { useAppDispatch } from '../../app/hooks'
+import SearchBar from '../../components/SearchBar'
+import SortByOrder from '../../components/SortByOrder'
 
 const ForAdmin = () => {
-    // const dispatch = useDispatch();
     const dispatch = useAppDispatch()
     const { verifiedUsers, unVerifiedUsers, isError, message } = useSelector((state: any) => state.admin)
 
@@ -62,14 +63,22 @@ const ForAdmin = () => {
         </motion.div>
     ))
 
- 
+    const errorSearch = [
+        <span className='text-white text-center mt-3' >no data found..</span>
+    ]
+
+
 
     return (
         <div className='data-users'>
+            <div className="sort-filter">
+                <SearchBar />
+                <SortByOrder />
+            </div>
             <Tabs>
-                <span className="tab-alone" title={`Verified (${renderVerified.length})`}>{renderVerified}</span>
-                <span title={`Unverified (${renderUnVerified.length})`}>{renderUnVerified}</span>
-                <span title={`All Users (${renderAllUsers.length})`}>{renderAllUsers}</span>
+                <span className="tab-alone" title={`Verified (${renderVerified.length})`}> {renderVerified.length > 0 ? renderVerified : errorSearch} </span>
+                <span title={`Unverified (${renderUnVerified.length})`}>{renderUnVerified.length > 0 ? renderUnVerified : errorSearch}</span>
+                <span title={`All Users (${renderAllUsers.length})`}>{renderAllUsers.length > 0 ? renderAllUsers : errorSearch}</span>
             </Tabs>
         </div>
     )

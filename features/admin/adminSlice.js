@@ -4,6 +4,8 @@ import adminService from './adminService'
 const initialState = {
   verifiedUsers: [],
   unVerifiedUsers:[],
+  filteredVerified:[],
+  filteredUnVerified:[],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -75,7 +77,37 @@ export const adminSlice = createSlice({
   initialState,
   reducers: {
     resetUsers: (state) => initialState,
+    filteredUsers: (state, action) => {
+			state.verifiedUsers = state.filteredVerified.filter((user) =>
+				user.username.toLowerCase().includes(action.payload) ||
+				user.email.toLowerCase().includes(action.payload)
+			);
+			state.unVerifiedUsers = state.filteredUnVerified.filter((user) =>
+				user.username.toLowerCase().includes(action.payload) ||
+				user.email.toLowerCase().includes(action.payload)
+			);
+		},
+    sortAtoZ:(state, action) => {
+      let sortedArrVerfied = [];
+      let sortedArrUnVerfied = [];
+      sortedArrVerfied.push(...(state.filteredVerified).sort((a, b) => ( a.username.localeCompare(b.username) )))
+      sortedArrUnVerfied.push(...(state.filteredUnVerified).sort((a, b) => ( a.username.localeCompare(b.username) )))
+      state.verifiedUsers = sortedArrVerfied
+      state.unVerifiedUsers = sortedArrUnVerfied
+    },
+    sortZtoA:(state, action) => {
+      let sortedArrVerfied = [];
+      let sortedArrUnVerfied = [];
+      sortedArrVerfied.push(...(state.filteredVerified).sort((a, b) => ( b.username.localeCompare(a.username) )))
+      sortedArrUnVerfied.push(...(state.filteredUnVerified).sort((a, b) => ( b.username.localeCompare(a.username) )))
+      state.verifiedUsers = sortedArrVerfied
+      state.unVerifiedUsers = sortedArrUnVerfied
+    },
+    returnDefaultOrder:(state, action) => {
+     //to be sorted out...
+    }
   },
+ 
   extraReducers: (builder) => {
     builder
       .addCase(getAllVerifiedUsers.pending, (state) => {
@@ -85,6 +117,7 @@ export const adminSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.verifiedUsers = action.payload
+        state.filteredVerified = action.payload
       })
       .addCase(getAllVerifiedUsers.rejected, (state, action) => {
         state.isLoading = false
@@ -98,6 +131,7 @@ export const adminSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.unVerifiedUsers = action.payload
+        state.filteredUnVerified = action.payload
       })
       .addCase(getAllUnVerifiedUsers.rejected, (state, action) => {
         state.isLoading = false
@@ -122,5 +156,5 @@ export const adminSlice = createSlice({
   },
 })
 
-export const { resetUsers } = adminSlice.actions
+export const { resetUsers, filteredUsers, sortAtoZ, sortZtoA, returnDefaultOrder } = adminSlice.actions
 export default adminSlice.reducer
