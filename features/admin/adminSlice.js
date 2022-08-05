@@ -79,12 +79,12 @@ export const adminSlice = createSlice({
     resetUsers: (state) => initialState,
     filteredUsers: (state, action) => {
 			state.verifiedUsers = state.filteredVerified.filter((user) =>
-				user.username.toLowerCase().includes(action.payload) ||
-				user.email.toLowerCase().includes(action.payload)
+				user.username.toLowerCase().includes(action.payload.toLocaleLowerCase()) || 
+				user.email.toLowerCase().includes(action.payload.toLocaleLowerCase())
 			);
 			state.unVerifiedUsers = state.filteredUnVerified.filter((user) =>
-				user.username.toLowerCase().includes(action.payload) ||
-				user.email.toLowerCase().includes(action.payload)
+				user.username.toLowerCase().includes(action.payload.toLocaleLowerCase()) ||
+				user.email.toLowerCase().includes(action.payload.toLocaleLowerCase())
 			);
 		},
     sortAtoZ:(state, action) => {
