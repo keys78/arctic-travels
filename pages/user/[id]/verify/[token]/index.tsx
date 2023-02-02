@@ -5,10 +5,10 @@ import { useRouter } from 'next/router'
 import Loader from "../../../../../components/Loader";
 
 const users = () => {
-	const [validUrl, setValidUrl] = useState(false);
+	const [isValidUrl, setValidUrl] = useState(false);
 	const router = useRouter()
 	const [isAnimating, setIsAnimating] = useState(true)
-	const [isLoading, updateIsLoading] = useState(false)
+	// const [isLoading, updateIsLoading] = useState(false)
 
 	useEffect(() => {
 		router.isReady && verifyEmailUrl();
@@ -23,11 +23,10 @@ const users = () => {
 
 	const verifyEmailUrl = async () => {
 		try {
-			const url = `https://arctic-travels-api.cyclic.app/auth/${router.query.id}/verify/${router.query.token}`;
-			const { data } = await axios.post(url);
+			const data = await axios.post(`https://arctic-travels-api.cyclic.app/auth/${router.query.id}/verify/${router.query.token}`);
+			console.log(data)
 
 			setValidUrl(true);
-			updateIsLoading(!isLoading)
 		} catch (error) {
 			console.log(error);
 			setValidUrl(false);
@@ -58,12 +57,18 @@ const users = () => {
 		</div>
 	]
 
-	return  (
+	return (
 		<>
-			{validUrl && successMessage}
-			{!validUrl && notFound}
+			{router.isReady ?
+				<>
+					{isValidUrl && successMessage}
+					{!isValidUrl && notFound}
+				</> :
+				<Loader />
+			}
 		</>
-	) 
+
+	)
 };
 
 export default users;
