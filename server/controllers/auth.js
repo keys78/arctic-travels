@@ -32,7 +32,7 @@ exports.register = async (userDetails, role, res, next) => {
         const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
 
-        sendEmail({
+        await sendEmail({
             to: user.email,
             subject: "Email Verification",
             text: confirmEmailMessage(url)
@@ -87,7 +87,7 @@ exports.login = async (req, res, next) => {
 
             const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-            sendEmail({
+            await sendEmail({
                 to: user.email,
                 subject: "Email Verification",
                 text: confirmEmailMessage(url)
@@ -108,7 +108,7 @@ exports.login = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            sendEmail({
+            await sendEmail({
                 to: user.email,
                 subject: "One-Time Login Access",
                 text:otpMessage(otp, user)
@@ -142,7 +142,7 @@ exports.resendOTP = async (req, res, next) => {
             user.OTP_code = otp.otp
             await user.save();
 
-            sendEmail({
+            await sendEmail({
                 to: user.email,
                 subject: "One-Time Login Access",
                 text:otpMessage(otp, user)
