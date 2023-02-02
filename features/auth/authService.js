@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 // const AUTH_API_URL = 'http://localhost:4000/auth/' //local
-const AUTH_API_URL = 'https://arctic-travels-api.herokuapp.com/auth/'
+// const AUTH_API_URL = 'https://arctic-travels-api.herokuapp.com/auth/'
+const AUTH_API_URL = 'https://arctic-travels-api.cyclic.app/auth/'
 
 
 const register = async (userData) => {

@@ -1,6 +1,7 @@
 import axios from 'axios'
 // const ADMIN_API_URL = 'http://localhost:4000/private/admin/' //local
-const ADMIN_API_URL = 'https://arctic-travels-api.herokuapp.com/private/admin/' //production
+// const ADMIN_API_URL = 'https://arctic-travels-api.herokuapp.com/private/admin/' //production
+const ADMIN_API_URL = 'https://arctic-travels-api.cyclic.app/private/admin/' //production
 
 
 

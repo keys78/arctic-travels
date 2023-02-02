@@ -23,7 +23,7 @@ const users = () => {
 
 	const verifyEmailUrl = async () => {
 		try {
-			const url = `https://arctic-travels-api.herokuapp.com/auth/${router.query.id}/verify/${router.query.token}`;
+			const url = `https://arctic-travels-api.cyclic.app/auth/${router.query.id}/verify/${router.query.token}`;
 			const { data } = await axios.post(url);
 
 			setValidUrl(true);
