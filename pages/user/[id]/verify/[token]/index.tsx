@@ -23,8 +23,7 @@ const users = () => {
 
 	const verifyEmailUrl = async () => {
 		try {
-			const data = await axios.post(`https://arctic-travels-api.cyclic.app/auth/${router.query.id}/verify/${router.query.token}`);
-			console.log(data)
+			 await axios.post(`https://arctic-travels-api.cyclic.app/auth/${router.query.id}/verify/${router.query.token}`);
 
 			setValidUrl(true);
 		} catch (error) {
